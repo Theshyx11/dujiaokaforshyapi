@@ -30,6 +30,11 @@ class OrderService
      */
     private $goodsService;
 
+    /**
+     * @var \App\Service\ShyApiRedemptionService
+     */
+    private $shyApiRedemptionService;
+
 
     /**
      * 优惠码服务层
@@ -41,6 +46,7 @@ class OrderService
     {
         $this->goodsService = app('Service\GoodsService');
         $this->couponService = app('Service\CouponService');
+        $this->shyApiRedemptionService = app('Service\ShyApiRedemptionService');
     }
 
 
@@ -111,6 +117,17 @@ class OrderService
             throw new RuleValidationException(__('dujiaoka.prompt.purchase_limit_exceeded'));
         }
         // 库存不足
+        if ($goods->isShyApiDelivery()) {
+            try {
+                $availableStock = $this->shyApiRedemptionService->getAvailableStock($goods, false);
+            } catch (\Throwable $exception) {
+                throw new RuleValidationException($exception->getMessage());
+            }
+            if ($request->input('by_amount') > $availableStock) {
+                throw new RuleValidationException(__('dujiaoka.prompt.inventory_shortage'));
+            }
+            return $goods;
+        }
         if ($request->input('by_amount') > $goods->in_stock) {
             throw new RuleValidationException(__('dujiaoka.prompt.inventory_shortage'));
         }

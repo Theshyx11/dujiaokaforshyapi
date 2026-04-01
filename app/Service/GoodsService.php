@@ -27,6 +27,16 @@ use App\Models\GoodsGroup;
  */
 class GoodsService
 {
+    /**
+     * ShyAPI 发货服务层
+     * @var \App\Service\ShyApiRedemptionService
+     */
+    private $shyApiRedemptionService;
+
+    public function __construct()
+    {
+        $this->shyApiRedemptionService = app('Service\ShyApiRedemptionService');
+    }
 
     /**
      * 获取所有分类并加载该分类下的商品
@@ -48,6 +58,13 @@ class GoodsService
             ->where('is_open', GoodsGroup::STATUS_OPEN)
             ->orderBy('ord', 'DESC')
             ->get();
+        if ($goods) {
+            foreach ($goods as $group) {
+                foreach ($group->goods as $item) {
+                    $this->hydrateDynamicStock($item);
+                }
+            }
+        }
         // 将自动
         return $goods ? $goods->toArray() : null;
     }
@@ -69,6 +86,9 @@ class GoodsService
             ->withCount(['carmis' => function($query) {
                 $query->where('status', Carmis::STATUS_UNSOLD);
             }])->where('id', $id)->first();
+        if ($goods) {
+            $this->hydrateDynamicStock($goods);
+        }
         return $goods;
     }
 
@@ -93,6 +113,11 @@ class GoodsService
             format_charge_input($goods->other_ipu_cnf) :
             null;
         return $goods;
+    }
+
+    public function refreshDynamicStock(Goods $goods): Goods
+    {
+        return $this->hydrateDynamicStock($goods, true);
     }
 
     /**
@@ -147,6 +172,20 @@ class GoodsService
     public function salesVolumeIncr(int $id, int $number = 1): bool
     {
         return Goods::query()->where('id', $id)->increment('sales_volume', $number);
+    }
+
+    private function hydrateDynamicStock(Goods $goods, bool $forceRefresh = false): Goods
+    {
+        if (!$goods->isShyApiDelivery()) {
+            return $goods;
+        }
+        try {
+            $stock = $this->shyApiRedemptionService->getAvailableStock($goods, !$forceRefresh);
+            $goods->setAttribute('in_stock', $stock);
+        } catch (\Throwable $exception) {
+            report($exception);
+        }
+        return $goods;
     }
 
 }

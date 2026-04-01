@@ -25,6 +25,12 @@ return [
         'wholesale_price_cnf' => '批發價配置',
         'automatic_delivery' => '自動發貨',
         'manual_processing' => '人工處理',
+        'delivery_source' => '發貨來源',
+        'delivery_source_carmis' => '本地卡密庫存',
+        'delivery_source_shyapi' => 'ShyAPI 兌換碼庫存',
+        'shyapi_name_prefix' => 'ShyAPI 名稱前綴',
+        'shyapi_quota' => 'ShyAPI 固定額度',
+        'shyapi_assigned_to' => 'ShyAPI 分配渠道',
         'is_open' => '是否上架',
         'coupon_id' => '可用折扣碼'
     ],
@@ -33,8 +39,12 @@ return [
     'helps' => [
         'retail_price' => '可以不填寫，主要用於展示',
         'picture' => '可不上傳，為預設圖片',
-        'in_stock' => '當商品類型為"人工處理"時，手動填寫的庫存數量才會生效。"自動發貨"類型的商品系統會自動識別庫存數量',
+        'delivery_source' => '自動發貨商品可選擇本地卡密，或直接從 ShyAPI 的兌換碼庫存發貨',
+        'in_stock' => '人工處理商品使用手動庫存。本地卡密自動發貨會讀取卡密數量。ShyAPI 自動發貨會即時讀取 ShyAPI 可用兌換碼數量',
         'buy_limit_num' => '防止惡意刷庫存，0為不限製客戶單次下單最大數量',
+        'shyapi_name_prefix' => '可選。按兌換碼名稱前綴篩選庫存，例如 10刀、月付、閒魚。建議至少配置名稱前綴或固定額度其中一項',
+        'shyapi_quota' => '可選。只發放指定額度的兌換碼，留空或 0 表示不按額度篩選',
+        'shyapi_assigned_to' => '導出兌換碼後會寫入這個渠道標記，便於區分 shop、xianyu 等庫存去向',
         'other_ipu_cnf' => '格式為[唯一標識(英文)=輸入框名字=是否必填]，例如：填寫 line_account=Line賬戶=true 表示產品詳情頁會新增一個 [Line賬戶] 輸入框，客戶可在其中輸入 [Line賬戶]，true 為必填，false 為選填。（一行一個）',
         'wholesale_price_cnf' => '例如：填寫 5=3 表示客戶購買 5 件或以上時，每件價格為 3 元。一行一個',
 

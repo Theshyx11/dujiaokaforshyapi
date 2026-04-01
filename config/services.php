@@ -30,4 +30,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'shyapi' => [
+        'base_url' => env('SHYAPI_BASE_URL'),
+        'access_token' => env('SHYAPI_ACCESS_TOKEN'),
+        'user_id' => env('SHYAPI_USER_ID'),
+        'timeout' => env('SHYAPI_TIMEOUT', 15),
+        'default_assigned_to' => env('SHYAPI_DEFAULT_ASSIGNED_TO', 'shop'),
+    ],
+
 ];

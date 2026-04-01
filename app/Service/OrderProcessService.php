@@ -71,6 +71,12 @@ class OrderProcessService
     private $goodsService;
 
     /**
+     * ShyAPI 发货服务层
+     * @var \App\Service\ShyApiRedemptionService
+     */
+    private $shyApiRedemptionService;
+
+    /**
      * 商品
      * @var Goods
      */
@@ -125,6 +131,7 @@ class OrderProcessService
         $this->carmisService = app('Service\CarmisService');
         $this->emailtplService = app('Service\EmailtplService');
         $this->goodsService = app('Service\GoodsService');
+        $this->shyApiRedemptionService = app('Service\ShyApiRedemptionService');
 
     }
 
@@ -410,7 +417,9 @@ class OrderProcessService
                 $completedOrder = $this->processManual($order);
             }
             // 销量加上
-            $this->goodsService->salesVolumeIncr($order->goods_id, $order->buy_amount);
+            if (in_array($completedOrder->status, [Order::STATUS_COMPLETED, Order::STATUS_PENDING], true)) {
+                $this->goodsService->salesVolumeIncr($order->goods_id, $order->buy_amount);
+            }
             DB::commit();
             // 如果开启了server酱
             if (dujiaoka_config_get('is_open_server_jiang', 0) == BaseModel::STATUS_OPEN) {
@@ -488,6 +497,9 @@ class OrderProcessService
      */
     public function processAuto(Order $order): Order
     {
+        if ($order->goods && $order->goods->isShyApiDelivery()) {
+            return $this->processShyApiAuto($order);
+        }
         // 获得卡密
         $carmis = $this->carmisService->withGoodsByAmountAndStatusUnsold($order->goods_id, $order->buy_amount);
         // 实际可使用的库存已经少于购买数量了
@@ -520,6 +532,39 @@ class OrderProcessService
         $mailBody = replace_mail_tpl($tpl, $mailData);
         // 邮件发送
         MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        return $order;
+    }
+
+    private function processShyApiAuto(Order $order): Order
+    {
+        try {
+            $codes = $this->shyApiRedemptionService->exportRedemptions($order->goods, $order);
+        } catch (\Throwable $exception) {
+            $order->info = $exception->getMessage();
+            $order->status = Order::STATUS_ABNORMAL;
+            $order->save();
+            return $order;
+        }
+
+        $order->info = implode(PHP_EOL, $codes);
+        $order->status = Order::STATUS_COMPLETED;
+        $order->save();
+
+        $mailData = [
+            'created_at' => $order->create_at,
+            'product_name' => $order->goods->gd_name,
+            'webname' => dujiaoka_config_get('text_logo', '独角数卡'),
+            'weburl' => config('app.url') ?? 'http://dujiaoka.com',
+            'ord_info' => implode('<br/>', $codes),
+            'ord_title' => $order->title,
+            'order_id' => $order->order_sn,
+            'buy_amount' => $order->buy_amount,
+            'ord_price' => $order->actual_price,
+        ];
+        $tpl = $this->emailtplService->detailByToken('card_send_user_email');
+        $mailBody = replace_mail_tpl($tpl, $mailData);
+        MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
+
         return $order;
     }
 

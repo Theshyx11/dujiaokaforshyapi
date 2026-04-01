@@ -40,14 +40,26 @@ class GoodsController extends AdminController
                     GoodsModel::AUTOMATIC_DELIVERY => Admin::color()->success(),
                     GoodsModel::MANUAL_PROCESSING => Admin::color()->info(),
                 ]);
+            $grid->column('delivery_source')
+                ->using(GoodsModel::getDeliverySourceMap())
+                ->label([
+                    GoodsModel::DELIVERY_SOURCE_CARMIS => Admin::color()->primary(),
+                    GoodsModel::DELIVERY_SOURCE_SHYAPI => Admin::color()->warning(),
+                ]);
             $grid->column('retail_price');
             $grid->column('actual_price')->sortable();
             $grid->column('in_stock')->display(function () {
                 // 如果为自动发货，则加载库存卡密
-                if ($this->type == GoodsModel::AUTOMATIC_DELIVERY) {
+                if ($this->type == GoodsModel::AUTOMATIC_DELIVERY && !$this->isShyApiDelivery()) {
                     return Carmis::query()->where('goods_id', $this->id)
                         ->where('status', Carmis::STATUS_UNSOLD)
                         ->count();
+                } elseif ($this->type == GoodsModel::AUTOMATIC_DELIVERY && $this->isShyApiDelivery()) {
+                    try {
+                        return app('Service\\ShyApiRedemptionService')->getAvailableStock($this);
+                    } catch (\Throwable $exception) {
+                        return $this->in_stock;
+                    }
                 } else {
                     return $this->in_stock;
                 }
@@ -114,6 +126,12 @@ class GoodsController extends AdminController
                     return admin_trans('dujiaoka.status_close');
                 }
             });
+            $show->field('delivery_source')->as(function ($deliverySource) {
+                return GoodsModel::getDeliverySourceMap()[$deliverySource] ?? $deliverySource;
+            });
+            $show->field('shyapi_name_prefix');
+            $show->field('shyapi_quota');
+            $show->field('shyapi_assigned_to');
             $show->wholesale_price_cnf()->unescape()->as(function ($wholesalePriceCnf) {
                 return  "<textarea class=\"form-control field_wholesale_price_cnf _normal_\"  rows=\"10\" cols=\"30\">" . $wholesalePriceCnf . "</textarea>";
             });
@@ -143,6 +161,7 @@ class GoodsController extends AdminController
             )->required();
             $form->image('picture')->autoUpload()->uniqueName()->help(admin_trans('goods.helps.picture'));
             $form->radio('type')->options(GoodsModel::getGoodsTypeMap())->default(GoodsModel::AUTOMATIC_DELIVERY)->required();
+            $form->radio('delivery_source')->options(GoodsModel::getDeliverySourceMap())->default(GoodsModel::DELIVERY_SOURCE_CARMIS)->help(admin_trans('goods.helps.delivery_source'));
             $form->currency('retail_price')->default(0)->help(admin_trans('goods.helps.retail_price'));
             $form->currency('actual_price')->default(0)->required();
             $form->number('in_stock')->help(admin_trans('goods.helps.in_stock'));
@@ -150,6 +169,9 @@ class GoodsController extends AdminController
             $form->number('buy_limit_num')->help(admin_trans('goods.helps.buy_limit_num'));
             $form->editor('buy_prompt');
             $form->editor('description');
+            $form->text('shyapi_name_prefix')->help(admin_trans('goods.helps.shyapi_name_prefix'));
+            $form->number('shyapi_quota')->default(0)->help(admin_trans('goods.helps.shyapi_quota'));
+            $form->text('shyapi_assigned_to')->default('shop')->help(admin_trans('goods.helps.shyapi_assigned_to'));
             $form->textarea('other_ipu_cnf')->help(admin_trans('goods.helps.other_ipu_cnf'));
             $form->textarea('wholesale_price_cnf')->help(admin_trans('goods.helps.wholesale_price_cnf'));
             $form->textarea('api_hook');

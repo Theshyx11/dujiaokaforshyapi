@@ -13,6 +13,9 @@ class Goods extends BaseModel
 
     protected $table = 'goods';
 
+    const DELIVERY_SOURCE_CARMIS = 0;
+    const DELIVERY_SOURCE_SHYAPI = 1;
+
     protected $dispatchesEvents = [
         'deleted' => GoodsDeleted::class
     ];
@@ -71,10 +74,26 @@ class Goods extends BaseModel
         if (isset($this->attributes['carmis_count'])
             &&
             $this->attributes['type'] == self::AUTOMATIC_DELIVERY
+            &&
+            !$this->isShyApiDelivery()
         ) {
            $this->attributes['in_stock'] = $this->attributes['carmis_count'];
         }
         return $this->attributes['in_stock'];
+    }
+
+    public function isShyApiDelivery(): bool
+    {
+        return (int) ($this->attributes['type'] ?? 0) === self::AUTOMATIC_DELIVERY
+            && (int) ($this->attributes['delivery_source'] ?? self::DELIVERY_SOURCE_CARMIS) === self::DELIVERY_SOURCE_SHYAPI;
+    }
+
+    public static function getDeliverySourceMap(): array
+    {
+        return [
+            self::DELIVERY_SOURCE_CARMIS => admin_trans('goods.fields.delivery_source_carmis'),
+            self::DELIVERY_SOURCE_SHYAPI => admin_trans('goods.fields.delivery_source_shyapi'),
+        ];
     }
 
     /**
