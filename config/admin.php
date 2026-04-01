@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => '独角数卡',
+    'name' => 'ShyAPI Shop',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<img src="/vendor/dujiaoka-admin/images/logo.jpg" width="35"> &nbsp;独角 数卡',
+    'logo' => '<img src="/vendor/dujiaoka-admin/images/logo.jpg" width="35"> &nbsp;ShyAPI Shop',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<img src="/vendor/dujiaoka-admin/images/logo.jpg">',
+    'logo-mini' => '<img src="/vendor/dujiaoka-admin/images/logo.jpg" alt="ShyAPI Shop">',
 
     /*
      |--------------------------------------------------------------------------
@@ -88,7 +88,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => '独角数卡 - 后台控制中心',
+    'title' => 'ShyAPI Shop - 管理后台',
 
     /*
     |--------------------------------------------------------------------------
