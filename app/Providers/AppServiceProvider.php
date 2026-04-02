@@ -12,6 +12,7 @@ use App\Service\PartnerService;
 use App\Service\PartnerWalletService;
 use App\Service\PayService;
 use App\Service\ShyApiRedemptionService;
+use App\Service\ZPayService;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
 
@@ -53,6 +54,9 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton('Service\ShyApiRedemptionService', function () {
             return $this->app->make(ShyApiRedemptionService::class);
+        });
+        $this->app->singleton('Service\ZPayService', function () {
+            return $this->app->make(ZPayService::class);
         });
         $this->app->singleton('Jenssegers\Agent', function () {
             return $this->app->make(Agent::class);

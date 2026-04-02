@@ -30,7 +30,7 @@ Route::group(['prefix' => 'pay', 'namespace' => 'Pay', 'middleware' => ['dujiaok
     Route::post('payjs/notify_url', 'PayjsController@notifyUrl');
     // 易支付
     Route::get('yipay/{payway}/{orderSN}', 'YipayController@gateway');
-    Route::get('yipay/notify_url', 'YipayController@notifyUrl');
+    Route::match(['get', 'post'], 'yipay/notify_url', 'YipayController@notifyUrl');
     Route::get('yipay/return_url', 'YipayController@returnUrl')->name('yipay-return');
     // paypal
     Route::get('paypal/{payway}/{orderSN}', 'PaypalPayController@gateway');

@@ -42,11 +42,17 @@ class OrderController extends BaseController
      */
     private $partnerService;
 
+    /**
+     * @var \App\Service\ZPayService
+     */
+    private $zPayService;
+
     public function __construct()
     {
         $this->orderService = app('Service\OrderService');
         $this->orderProcessService = app('Service\OrderProcessService');
         $this->partnerService = app('Service\PartnerService');
+        $this->zPayService = app('Service\ZPayService');
     }
 
     /**
@@ -160,6 +166,7 @@ class OrderController extends BaseController
         if (!$order || $order->status == Order::STATUS_EXPIRED) {
             return response()->json(['msg' => 'expired', 'code' => 400001]);
         }
+        $order = $this->refreshOrderPaymentStatus($order);
         // 订单已经支付
         if ($order->status == Order::STATUS_WAIT_PAY) {
             return response()->json(['msg' => 'wait....', 'code' => 400000]);
@@ -187,7 +194,21 @@ class OrderController extends BaseController
         if (!$order) {
             return $this->err(__('dujiaoka.prompt.order_does_not_exist'));
         }
+        $order = $this->refreshOrderPaymentStatus($order);
         return $this->render('static_pages/orderinfo', ['orders' => [$order]], __('dujiaoka.page-title.order-detail'));
+    }
+
+    private function refreshOrderPaymentStatus(Order $order): Order
+    {
+        if ($order->status !== Order::STATUS_WAIT_PAY) {
+            return $order;
+        }
+
+        if (!$this->zPayService->syncOrderFromRemote($order)) {
+            return $order;
+        }
+
+        return $this->orderService->detailOrderSN($order->order_sn) ?: $order;
     }
 
     /**
