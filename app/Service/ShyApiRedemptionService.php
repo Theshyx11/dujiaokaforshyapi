@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Cache;
 class ShyApiRedemptionService
 {
     private const STOCK_CACHE_TTL = 60;
+    private const STATUS_CACHE_TTL = 300;
+    private const QUOTA_MODE_AUTO = 'auto';
+    private const QUOTA_MODE_DISPLAY = 'display';
+    private const QUOTA_MODE_INTERNAL = 'internal';
 
     /**
      * @var \GuzzleHttp\Client
@@ -89,15 +93,24 @@ class ShyApiRedemptionService
     private function postJson(string $uri, array $payload): array
     {
         $response = $this->client->post(ltrim($uri, '/'), [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => (string) config('services.shyapi.access_token'),
-                'New-Api-User' => (string) config('services.shyapi.user_id'),
-            ],
+            'headers' => $this->buildHeaders(),
             'json' => $payload,
         ]);
 
-        $body = (string) $response->getBody();
+        return $this->decodeJsonResponse($response->getBody()->getContents());
+    }
+
+    private function getJson(string $uri): array
+    {
+        $response = $this->client->get(ltrim($uri, '/'), [
+            'headers' => $this->buildHeaders(),
+        ]);
+
+        return $this->decodeJsonResponse($response->getBody()->getContents());
+    }
+
+    private function decodeJsonResponse(string $body): array
+    {
         $decoded = json_decode($body, true);
 
         if (!is_array($decoded)) {
@@ -111,6 +124,15 @@ class ShyApiRedemptionService
         }
 
         return $decoded['data'];
+    }
+
+    private function buildHeaders(): array
+    {
+        return [
+            'Accept' => 'application/json',
+            'Authorization' => (string) config('services.shyapi.access_token'),
+            'New-Api-User' => (string) config('services.shyapi.user_id'),
+        ];
     }
 
     private function ensureConfigured(): void
@@ -133,7 +155,7 @@ class ShyApiRedemptionService
         }
 
         $namePrefix = trim((string) ($goods->shyapi_name_prefix ?? ''));
-        $quota = (int) ($goods->shyapi_quota ?? 0);
+        $quota = $this->normalizeQuotaFilter((int) ($goods->shyapi_quota ?? 0));
         if ($namePrefix === '' && $quota <= 0) {
             throw new \RuntimeException('ShyAPI 商品至少需要配置名称前缀或固定额度');
         }
@@ -159,5 +181,44 @@ class ShyApiRedemptionService
     private function getStockCacheKey(array $filters): string
     {
         return 'shyapi_stock_'.md5(json_encode($filters, JSON_UNESCAPED_UNICODE));
+    }
+
+    private function normalizeQuotaFilter(int $quota): int
+    {
+        if ($quota <= 0) {
+            return 0;
+        }
+
+        $mode = strtolower((string) config('services.shyapi.quota_mode', self::QUOTA_MODE_AUTO));
+        if ($mode === self::QUOTA_MODE_INTERNAL) {
+            return $quota;
+        }
+
+        $status = $this->getStatus();
+        $displayType = strtoupper((string) ($status['quota_display_type'] ?? 'USD'));
+        if ($displayType === 'TOKENS') {
+            return $quota;
+        }
+
+        $quotaPerUnit = (int) round((float) ($status['quota_per_unit'] ?? 0));
+        if ($quotaPerUnit <= 0) {
+            throw new \RuntimeException('ShyAPI quota_per_unit 配置异常');
+        }
+
+        // auto 模式兼容两种写法：
+        // 1. 商品填写 10 / 50 这类售卖面值
+        // 2. 商品已经直接填写内部 quota（如 5000000）
+        if ($mode === self::QUOTA_MODE_AUTO && $quota >= $quotaPerUnit && $quota % $quotaPerUnit === 0) {
+            return $quota;
+        }
+
+        return (int) round($quota * $quotaPerUnit);
+    }
+
+    private function getStatus(): array
+    {
+        return Cache::remember('shyapi_status', self::STATUS_CACHE_TTL, function () {
+            return $this->getJson('api/status');
+        });
     }
 }

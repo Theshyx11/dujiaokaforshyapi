@@ -45,7 +45,7 @@ return [
         'buy_limit_num' => '防止惡意刷庫存，0為不限製客戶單次下單最大數量',
         'partner_redeem_enabled' => '開啟後，這個商品會出現在合夥人中心的佣金兌換列表裡。建議只給明確用於站內兌換的套餐開啟',
         'shyapi_name_prefix' => '可選。按兌換碼名稱前綴篩選庫存，例如 10刀、月付、閒魚。建議至少配置名稱前綴或固定額度其中一項',
-        'shyapi_quota' => '可選。只發放指定額度的兌換碼，留空或 0 表示不按額度篩選',
+        'shyapi_quota' => '可選。預設按售賣面值填寫，例如 10 表示 10 USD、50 表示 50 USD；系統會自動換算為 ShyAPI 內部 quota。留空或 0 表示不按額度篩選',
         'shyapi_assigned_to' => '導出兌換碼後會寫入這個渠道標記，便於區分 shop、xianyu 等庫存去向',
         'other_ipu_cnf' => '格式為[唯一標識(英文)=輸入框名字=是否必填]，例如：填寫 line_account=Line賬戶=true 表示產品詳情頁會新增一個 [Line賬戶] 輸入框，客戶可在其中輸入 [Line賬戶]，true 為必填，false 為選填。（一行一個）',
         'wholesale_price_cnf' => '例如：填寫 5=3 表示客戶購買 5 件或以上時，每件價格為 3 元。一行一個',

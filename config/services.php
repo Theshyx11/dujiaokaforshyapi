@@ -36,6 +36,7 @@ return [
         'user_id' => env('SHYAPI_USER_ID'),
         'timeout' => env('SHYAPI_TIMEOUT', 15),
         'default_assigned_to' => env('SHYAPI_DEFAULT_ASSIGNED_TO', 'shop'),
+        'quota_mode' => env('SHYAPI_QUOTA_MODE', 'auto'),
     ],
 
 ];
