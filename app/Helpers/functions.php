@@ -10,6 +10,7 @@
 
 use App\Exceptions\AppException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 if (! function_exists('replace_mail_tpl')) {
@@ -42,8 +43,71 @@ if (! function_exists('replace_mail_tpl')) {
 }
 
 
-if (! function_exists('dujiaoka_config_get')) {
+if (! function_exists('dujiaoka_config_all')) {
+    /**
+     * 读取系统配置，缓存不存在时自动从数据库回源
+     *
+     * @return array
+     */
+    function dujiaoka_config_all(): array
+    {
+        $sysConfig = Cache::get('system-setting');
+        if (is_array($sysConfig) && $sysConfig) {
+            return $sysConfig;
+        }
 
+        try {
+            $rawValue = DB::table(config('admin.database.settings_table', 'admin_settings'))
+                ->where('slug', 'system-setting')
+                ->value('value');
+        } catch (\Throwable $exception) {
+            report($exception);
+            return is_array($sysConfig) ? $sysConfig : [];
+        }
+
+        if (!$rawValue) {
+            return [];
+        }
+
+        $decodedValue = json_decode($rawValue, true);
+        if (!is_array($decodedValue)) {
+            return [];
+        }
+
+        Cache::forever('system-setting', $decodedValue);
+
+        return $decodedValue;
+    }
+}
+
+if (! function_exists('dujiaoka_config_store')) {
+    /**
+     * 持久化系统配置到数据库和缓存
+     *
+     * @param array $input
+     * @return array
+     */
+    function dujiaoka_config_store(array $input): array
+    {
+        $now = now();
+        $payload = json_encode($input, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        DB::table(config('admin.database.settings_table', 'admin_settings'))->updateOrInsert(
+            ['slug' => 'system-setting'],
+            [
+                'value' => $payload,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]
+        );
+
+        Cache::forever('system-setting', $input);
+
+        return $input;
+    }
+}
+
+if (! function_exists('dujiaoka_config_get')) {
     /**
      * 系统配置获取
      *
@@ -57,7 +121,7 @@ if (! function_exists('dujiaoka_config_get')) {
      */
     function dujiaoka_config_get(string $key, $default = null)
     {
-       $sysConfig = Cache::get('system-setting');
+       $sysConfig = dujiaoka_config_all();
        return $sysConfig[$key] ?? $default;
     }
 }
