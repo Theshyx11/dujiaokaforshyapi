@@ -110,7 +110,7 @@ class PayController extends BaseController
      * @copyright assimon<ashang@utf8.hk>
      * @link      http://utf8.hk/
      */
-    public function redirectGateway(string $handle,string $payway, string $orderSN)
+    public function redirectGateway(string $payway, string $orderSN)
     {
         try {
             $this->checkOrder($orderSN);
@@ -120,7 +120,11 @@ class PayController extends BaseController
                 $this->orderProcessService->completedOrder($this->order->order_sn, 0.00);
                 return redirect(url('detail-order-sn', ['orderSN' => $this->order->order_sn]));
             }
-            return redirect(url(urldecode($handle), ['payway' => $payway, 'orderSN' => $orderSN]));
+            $payGateway = $this->payService->detailByCheck($payway);
+            if (!$payGateway) {
+                throw new RuleValidationException(__('dujiaoka.prompt.pay_gateway_does_not_exist'));
+            }
+            return redirect(url(ltrim($payGateway->pay_handleroute, '/'), ['payway' => $payway, 'orderSN' => $orderSN]));
         } catch (RuleValidationException $exception) {
             return $this->err($exception->getMessage());
         }
