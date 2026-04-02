@@ -19,6 +19,21 @@
 </div>
 <div class="row">
     <div class="col-12">
+        <div class="shyapi-flow-card mb-3">
+            <span class="shyapi-flow-kicker">查询说明</span>
+            <h5>支持按订单号、邮箱或浏览器缓存查询</h5>
+            <p>
+                如果你已经完成支付但还没来得及复制兑换码，可以先在这里找回订单，再进入 <strong>code.shyapi.top</strong> 完成充值。
+            </p>
+            <div class="shyapi-inline-actions">
+                <a class="btn btn-shyapi-ghost btn-sm" href="https://code.shyapi.top/console/topup" target="_blank" rel="noopener">打开充值页</a>
+                <a class="btn btn-shyapi-ghost btn-sm" href="https://shop.shyapi.top" target="_blank" rel="noopener">返回商城</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
         <div class="card card-body">
             <div class="tab-pane show active" id="bordered-tabs-preview">
                 <ul class="nav nav-tabs nav-bordered mb-3">
@@ -54,7 +69,7 @@
                                 {{-- 立即查询 --}}
                                 <button class="btn btn-primary" type="submit">{{ __('hyper.searchOrder_search_now') }}</button>
                                 {{-- 重置 --}}
-                                <button type="reset" class="btn btn-primary">{{ __('hyper.searchOrder_reset_order') }}</button>
+                                <button type="reset" class="btn btn-shyapi-ghost">{{ __('hyper.searchOrder_reset_order') }}</button>
                             </div>
                         </form>
                     </div>
@@ -77,7 +92,7 @@
                                 {{-- 立即查询 --}}
                                 <button class="btn btn-primary" type="submit">{{ __('hyper.searchOrder_search_now') }}</button>
                                 {{-- 重置 --}}
-                                <button type="reset" class="btn btn-primary">{{ __('hyper.searchOrder_reset_order') }}</button>
+                                <button type="reset" class="btn btn-shyapi-ghost">{{ __('hyper.searchOrder_reset_order') }}</button>
                             </div>
                         </form>
                     </div>

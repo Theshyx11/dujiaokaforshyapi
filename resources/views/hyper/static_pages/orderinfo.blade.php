@@ -8,6 +8,19 @@
         </div>
     </div>
 </div>
+@if(count($orders))
+<section class="shyapi-flow-card mb-4">
+    <span class="shyapi-flow-kicker">兑换指引</span>
+    <h5>订单完成后这样使用</h5>
+    <p>
+        复制本页展示的兑换码，登录 <strong>code.shyapi.top</strong> 后进入充值页兑换到账。充值完成后再到令牌页面创建 API Key，即可开始调用。
+    </p>
+    <div class="shyapi-inline-actions">
+        <a class="btn btn-shyapi-primary btn-sm" href="https://code.shyapi.top/console/topup" target="_blank" rel="noopener">前往充值</a>
+        <a class="btn btn-shyapi-ghost btn-sm" href="https://code.shyapi.top/console/token" target="_blank" rel="noopener">管理 API Key</a>
+    </div>
+</section>
+@endif
 <div class="orderinfo-grid">
 @foreach($orders as $order)
     <div class="row">
@@ -95,9 +108,12 @@
                     {{ __('hyper.orderinfo_carmi') }}
                 </h5>
                 <textarea class="form-control textarea-kami" rows="5">{{$order['info']}}</textarea>
-                <button class="btn btn-outline-primary kami-btn" data-clipboard-text="{{$order['info']}}">
+                <div class="shyapi-inline-actions justify-content-end">
+                    <a class="btn btn-shyapi-ghost btn-sm" href="https://code.shyapi.top/console/topup" target="_blank" rel="noopener">去充值</a>
+                    <button class="btn btn-outline-primary kami-btn" data-clipboard-text="{{$order['info']}}">
                     {{ __('hyper.orderinfo_copy_carmi') }}
-                </button>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -106,10 +122,13 @@
 @if(!count($orders))
 <div class="row justify-content-center">
     <div class="col-lg-4">
-		<div class="text-center">
-			<h1 class="text-error mt-4">error</h1>
-            <h4 class="text-uppercase text-danger mt-3">{{ __('hyper.orderinfo_order_information') }}</h4>
-            <a class="btn btn-info mt-3" href="javascript:history.back(-1);"><i class="mdi mdi-reply"></i> {{ __('hyper.error_back_btn') }}</a>
+		<div class="text-center shyapi-empty-state">
+			<h1 class="mt-4">未找到订单</h1>
+            <p class="mt-3 mb-0">请确认订单号、邮箱或查询方式是否正确。如果刚刚付款完成，也可以稍等片刻后再刷新查询。</p>
+            <div class="shyapi-inline-actions justify-content-center mt-3">
+                <a class="btn btn-shyapi-ghost" href="{{ url('order-search') }}">重新查询</a>
+                <a class="btn btn-shyapi-primary" href="https://shop.shyapi.top" target="_blank" rel="noopener">返回商城</a>
+            </div>
         </div> <!-- end /.text-center-->
     </div> <!-- end col-->
 </div>

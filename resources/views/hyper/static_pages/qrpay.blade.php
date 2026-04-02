@@ -10,6 +10,17 @@
 </div>
 <div class="row justify-content-center">
     <div class="col-lg-6">
+        <div class="shyapi-flow-card mb-3">
+            <span class="shyapi-flow-kicker">扫码支付中</span>
+            <h5>支付成功后页面会自动跳转</h5>
+            <p>
+                当前订单号为 <strong>{{ $orderid }}</strong>。支付成功后系统会自动跳到订单详情页，你可以直接复制兑换码并前往 <strong>code.shyapi.top</strong> 充值。
+            </p>
+            <div class="shyapi-inline-actions">
+                <a class="btn btn-shyapi-ghost btn-sm" href="https://code.shyapi.top/console/topup" target="_blank" rel="noopener">打开充值页</a>
+                <a class="btn btn-shyapi-ghost btn-sm" href="{{ url('order-search') }}">查询订单</a>
+            </div>
+        </div>
         <div class="card border-primary border">
             <div class="card-body">
                 <h5 class="card-title text-primary text-center">{{ __('hyper.qrpay_order_expiration_date') }} {{ dujiaoka_config_get('order_expire_time', 5) }} {{ __('hyper.qrpay_expiration_date') }}</h5>
@@ -18,6 +29,11 @@
                 </div>
                 {{-- 订单金额 --}}
                 <p class="card-text text-center">{{ __('hyper.qrpay_actual_payment') }}: {{ $actual_price }}</p>
+                <div class="shyapi-step-list">
+                    <div><span>01</span><p>使用当前支付方式完成付款</p></div>
+                    <div><span>02</span><p>系统每 5 秒检测一次订单状态</p></div>
+                    <div><span>03</span><p>支付成功后跳转详情页复制兑换码</p></div>
+                </div>
                 @if(Agent::isMobile() && isset($jump_payuri))
                     <p class="errpanl" style="text-align: center"><a href="{{ $jump_payuri }}" class="">{{ __('hyper.qrpay_open_app_to_pay') }}</a></p>
                 @endif

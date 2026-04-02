@@ -393,6 +393,97 @@ body.shyapi-hyper .shyapi-buy-description-note {
     line-height: 1.75;
 }
 
+body.shyapi-hyper .shyapi-flow-card {
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid var(--shy-border);
+    background:
+        radial-gradient(circle at top right, rgba(244, 193, 93, 0.12), transparent 32%),
+        linear-gradient(180deg, rgba(24, 19, 12, 0.96), rgba(10, 10, 10, 0.96));
+    box-shadow: var(--shy-shadow);
+}
+
+body.shyapi-hyper .shyapi-flow-kicker {
+    display: inline-flex;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 193, 93, 0.24);
+    color: #f4d18a;
+    background: rgba(244, 193, 93, 0.08);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+body.shyapi-hyper .shyapi-flow-card h5 {
+    margin: 16px 0 10px;
+}
+
+body.shyapi-hyper .shyapi-flow-card p {
+    margin: 0;
+    color: var(--shy-text-soft);
+    line-height: 1.8;
+}
+
+body.shyapi-hyper .shyapi-inline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+body.shyapi-hyper .shyapi-step-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+body.shyapi-hyper .shyapi-step-list > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(244, 193, 93, 0.12);
+}
+
+body.shyapi-hyper .shyapi-step-list > div:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+body.shyapi-hyper .shyapi-step-list span {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: #1f1405;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f7d57b, #c98a28);
+}
+
+body.shyapi-hyper .shyapi-step-list p {
+    color: var(--shy-text);
+}
+
+body.shyapi-hyper .shyapi-empty-state {
+    padding: 32px 28px;
+    border-radius: 24px;
+    border: 1px solid var(--shy-border);
+    background: var(--shy-card);
+    box-shadow: var(--shy-shadow);
+}
+
+body.shyapi-hyper .shyapi-empty-state h1 {
+    color: #ffe8a7;
+}
+
+body.shyapi-hyper .shyapi-empty-state p {
+    color: var(--shy-text-soft);
+    line-height: 1.75;
+}
+
 body.shyapi-hyper .pay-grid .pay-type {
     border-radius: 16px;
     border: 1px solid var(--shy-border);
@@ -468,6 +559,12 @@ body.shyapi-hyper .back-to-top .btn {
     body.shyapi-hyper .shyapi-shop-hero {
         padding: 22px;
         border-radius: 24px;
+    }
+
+    body.shyapi-hyper .shyapi-flow-card,
+    body.shyapi-hyper .shyapi-empty-state {
+        padding: 20px;
+        border-radius: 20px;
     }
 
     body.shyapi-hyper .shyapi-hero-title {
