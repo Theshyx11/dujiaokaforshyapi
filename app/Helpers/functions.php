@@ -126,6 +126,25 @@ if (! function_exists('dujiaoka_config_get')) {
     }
 }
 
+if (! function_exists('partner_enabled')) {
+    function partner_enabled(): bool
+    {
+        return (int) dujiaoka_config_get('partner_enabled', \App\Models\BaseModel::STATUS_OPEN) === \App\Models\BaseModel::STATUS_OPEN;
+    }
+}
+
+if (! function_exists('partner_auth')) {
+    function partner_auth(): ?\App\Models\Partner
+    {
+        try {
+            return app('Service\PartnerService')->current();
+        } catch (\Throwable $exception) {
+            report($exception);
+            return null;
+        }
+    }
+}
+
 if (! function_exists('format_wholesale_price')) {
 
     /**

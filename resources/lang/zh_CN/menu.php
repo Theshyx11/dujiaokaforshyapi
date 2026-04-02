@@ -27,6 +27,10 @@ return [
         'pay_configuration'  => '支付配置',
         'order_manage' => '销售数据',
         'order'        => '订单列表',
+        'partner_manage' => '合伙人分销',
+        'partner' => '合伙人列表',
+        'partner_transactions' => '佣金台账',
+        'partner_redemptions' => '卡券兑换',
         'system_setting' => '系统设置',
         'email_test' => '邮件测试'
     ],

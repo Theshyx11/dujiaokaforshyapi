@@ -49,17 +49,22 @@ class ShyApiRedemptionService
 
     public function exportRedemptions(Goods $goods, Order $order): array
     {
+        return $this->issueRedemptions($goods, (int) $order->buy_amount, $order->order_sn);
+    }
+
+    public function issueRedemptions(Goods $goods, int $count, string $batch): array
+    {
         $this->ensureConfigured();
         $filters = $this->buildFilters($goods);
         $payload = array_merge($filters, [
-            'count' => (int) $order->buy_amount,
+            'count' => $count,
             'assigned_to' => $this->resolveAssignedTo($goods),
-            'assigned_batch' => $order->order_sn,
+            'assigned_batch' => $batch,
         ]);
 
         $data = $this->postJson('api/redemption/export', $payload);
         $keys = $data['keys'] ?? [];
-        if (!is_array($keys) || count($keys) !== (int) $order->buy_amount) {
+        if (!is_array($keys) || count($keys) !== $count) {
             throw new \RuntimeException('ShyAPI 返回的兑换码数量异常');
         }
         foreach ($keys as $key) {

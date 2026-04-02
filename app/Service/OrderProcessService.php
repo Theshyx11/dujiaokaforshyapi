@@ -124,6 +124,18 @@ class OrderProcessService
      */
     private $payID;
 
+    /**
+     * 合伙人归因ID
+     * @var int|null
+     */
+    private $partnerID;
+
+    /**
+     * 合伙人归因邀请码
+     * @var string|null
+     */
+    private $partnerReferralCode;
+
     public function __construct()
     {
         $this->couponService = app('Service\CouponService');
@@ -142,6 +154,12 @@ class OrderProcessService
     public function setPayID(int $payID): void
     {
         $this->payID = $payID;
+    }
+
+    public function setPartner(?int $partnerID, ?string $partnerReferralCode = null): void
+    {
+        $this->partnerID = $partnerID;
+        $this->partnerReferralCode = $partnerReferralCode;
     }
 
 
@@ -334,6 +352,8 @@ class OrderProcessService
             $order->email = $this->email;
             // 支付方式.
             $order->pay_id = $this->payID;
+            $order->partner_id = $this->partnerID;
+            $order->partner_referral_code = $this->partnerReferralCode;
             // 商品单价
             $order->goods_price = $this->goods->actual_price;
             // 购买数量

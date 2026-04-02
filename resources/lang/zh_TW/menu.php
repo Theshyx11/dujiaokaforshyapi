@@ -27,6 +27,10 @@ return [
         'pay_configuration'  => '支付配置',
         'order_manage' => '銷售數據',
         'order'        => '訂單清單',
+        'partner_manage' => '合夥人分銷',
+        'partner' => '合夥人列表',
+        'partner_transactions' => '佣金台賬',
+        'partner_redemptions' => '卡券兌換',
         'system_setting' => '系統設定'
     ],
 ];

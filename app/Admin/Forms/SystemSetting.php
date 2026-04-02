@@ -87,6 +87,12 @@ class SystemSetting extends Form
             $this->text('geetest_key', admin_trans('system-setting.fields.geetest_key'));
             $this->switch('is_open_geetest', admin_trans('system-setting.fields.is_open_geetest'))->default(BaseModel::STATUS_CLOSE);
         });
+        $this->tab('合伙人分销', function () {
+            $this->switch('partner_enabled', '开启合伙人中心')->default(BaseModel::STATUS_OPEN);
+            $this->number('partner_level_one_rate', '一级佣金比例(%)')->default(20)->min(0)->max(100)->required();
+            $this->number('partner_level_two_rate', '二级佣金比例(%)')->default(10)->min(0)->max(100)->required();
+            $this->number('partner_commission_freeze_days', '佣金冻结天数')->default(0)->min(0)->required();
+        });
         $this->confirm(
             admin_trans('dujiaoka.warning_title'),
             admin_trans('system-setting.rule_messages.change_reboot_php_worker')

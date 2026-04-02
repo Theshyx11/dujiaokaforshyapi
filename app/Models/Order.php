@@ -143,4 +143,9 @@ class Order extends BaseModel
         return $this->belongsTo(Pay::class, 'pay_id');
     }
 
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class, 'partner_id');
+    }
+
 }

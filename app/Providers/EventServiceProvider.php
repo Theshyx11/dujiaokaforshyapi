@@ -29,6 +29,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderUpdated::class => [
             \App\Listeners\OrderUpdated::class,
+            \App\Listeners\PartnerOrderCommissionListener::class,
         ],
     ];
 

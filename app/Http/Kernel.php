@@ -5,6 +5,8 @@ namespace App\Http;
 use App\Http\Middleware\DujiaoBoot;
 use App\Http\Middleware\InstallCheck;
 use App\Http\Middleware\PayGateWay;
+use App\Http\Middleware\RequirePartnerAuth;
+use App\Http\Middleware\TrackPartnerReferral;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,6 +70,8 @@ class Kernel extends HttpKernel
         'dujiaoka.boot' => DujiaoBoot::class,
         'dujiaoka.pay_gate_way' => PayGateWay::class,
         'install.check' => InstallCheck::class,
+        'partner.auth' => RequirePartnerAuth::class,
+        'partner.referral' => TrackPartnerReferral::class,
     ];
 
     /**

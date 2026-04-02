@@ -8,6 +8,8 @@ use App\Service\EmailtplService;
 use App\Service\GoodsService;
 use App\Service\OrderProcessService;
 use App\Service\OrderService;
+use App\Service\PartnerService;
+use App\Service\PartnerWalletService;
 use App\Service\PayService;
 use App\Service\ShyApiRedemptionService;
 use Illuminate\Support\ServiceProvider;
@@ -39,6 +41,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton('Service\OrderProcessService', function () {
             return $this->app->make(OrderProcessService::class);
+        });
+        $this->app->singleton('Service\PartnerService', function () {
+            return $this->app->make(PartnerService::class);
+        });
+        $this->app->singleton('Service\PartnerWalletService', function () {
+            return $this->app->make(PartnerWalletService::class);
         });
         $this->app->singleton('Service\EmailtplService', function () {
             return $this->app->make(EmailtplService::class);

@@ -26,7 +26,7 @@ class OrderController extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new Order(['goods', 'coupon', 'pay']), function (Grid $grid) {
+        return Grid::make(new Order(['goods', 'coupon', 'pay', 'partner']), function (Grid $grid) {
             $grid->model()->orderBy('id', 'DESC');
             $grid->column('id')->sortable();
             $grid->column('order_sn')->copyable();
@@ -46,6 +46,8 @@ class OrderController extends AdminController
             $grid->column('wholesale_discount_price');
             $grid->column('actual_price');
             $grid->column('pay.pay_name', admin_trans('order.fields.pay_id'));
+            $grid->column('partner.email', '归因合伙人');
+            $grid->column('partner_referral_code', '归因邀请码')->copyable();
             $grid->column('buy_ip');
             $grid->column('search_pwd')->copyable();
             $grid->column('trade_no')->copyable();
@@ -64,6 +66,7 @@ class OrderController extends AdminController
                 $filter->equal('goods_id')->select(Goods::query()->pluck('gd_name', 'id'));
                 $filter->equal('coupon_id')->select(Coupon::query()->pluck('coupon', 'id'));
                 $filter->equal('pay_id')->select(Pay::query()->pluck('pay_name', 'id'));
+                $filter->equal('partner_id', '归因合伙人')->select(\App\Models\Partner::query()->pluck('email', 'id'));
                 $filter->whereBetween('created_at', function ($q) {
                     $start = $this->input['start'] ?? null;
                     $end = $this->input['end'] ?? null;
@@ -94,7 +97,7 @@ class OrderController extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new Order(['goods', 'coupon', 'pay']), function (Show $show) {
+        return Show::make($id, new Order(['goods', 'coupon', 'pay', 'partner']), function (Show $show) {
             $show->field('id');
             $show->field('order_sn');
             $show->field('title');
@@ -108,6 +111,8 @@ class OrderController extends AdminController
             $show->field('total_price');
             $show->field('actual_price');
             $show->field('buy_ip');
+            $show->field('partner.email', '归因合伙人');
+            $show->field('partner_referral_code', '归因邀请码');
             $show->field('info')->unescape()->as(function ($info) {
                 return  "<textarea class=\"form-control field_wholesale_price_cnf _normal_\"  rows=\"10\" cols=\"30\">" . $info . "</textarea>";
             });
@@ -129,7 +134,7 @@ class OrderController extends AdminController
      */
     protected function form()
     {
-        return Form::make(new Order(['goods', 'coupon', 'pay']), function (Form $form) {
+        return Form::make(new Order(['goods', 'coupon', 'pay', 'partner']), function (Form $form) {
             $form->display('id');
             $form->display('order_sn');
             $form->text('title');
@@ -142,6 +147,8 @@ class OrderController extends AdminController
             $form->display('total_price');
             $form->display('actual_price');
             $form->display('email');
+            $form->display('partner.email', '归因合伙人');
+            $form->display('partner_referral_code', '归因邀请码');
             $form->textarea('info');
             $form->display('buy_ip');
             $form->display('pay.pay_name', admin_trans('order.fields.pay_id'));

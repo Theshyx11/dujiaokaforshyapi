@@ -37,10 +37,16 @@ class OrderController extends BaseController
      */
     private $orderProcessService;
 
+    /**
+     * @var \App\Service\PartnerService
+     */
+    private $partnerService;
+
     public function __construct()
     {
         $this->orderService = app('Service\OrderService');
         $this->orderProcessService = app('Service\OrderProcessService');
+        $this->partnerService = app('Service\PartnerService');
     }
 
     /**
@@ -79,6 +85,12 @@ class OrderController extends BaseController
             $this->orderProcessService->setBuyIP($request->getClientIp());
             // 查询密码
             $this->orderProcessService->setSearchPwd($request->input('search_pwd', ''));
+            // 合伙人归因
+            $partner = $this->partnerService->resolveAttributionPartner($request->input('email'));
+            $this->orderProcessService->setPartner(
+                $partner ? (int) $partner->id : null,
+                $partner ? $partner->referral_code : null
+            );
             // 创建订单
             $order = $this->orderProcessService->createOrder();
             DB::commit();

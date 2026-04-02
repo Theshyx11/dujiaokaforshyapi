@@ -120,6 +120,22 @@ class GoodsService
         return $this->hydrateDynamicStock($goods, true);
     }
 
+    public function redeemableShyApiGoods()
+    {
+        $goodsList = Goods::query()
+            ->where('is_open', Goods::STATUS_OPEN)
+            ->where('type', Goods::AUTOMATIC_DELIVERY)
+            ->where('delivery_source', Goods::DELIVERY_SOURCE_SHYAPI)
+            ->orderBy('ord', 'DESC')
+            ->get();
+
+        foreach ($goodsList as $goods) {
+            $this->hydrateDynamicStock($goods);
+        }
+
+        return $goodsList;
+    }
+
     /**
      * 验证商品状态
      *

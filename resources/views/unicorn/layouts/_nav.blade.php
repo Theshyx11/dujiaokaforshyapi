@@ -31,6 +31,11 @@
                                     <li class="nav-item">
                                         <a class="nav-link @if(\Illuminate\Support\Facades\Request::url() == url('order-search')) active @endif" href="{{ url('order-search') }}">{{ __('dujiaoka.order_search') }}</a>
                                     </li>
+                                    @if(partner_enabled())
+                                        <li class="nav-item">
+                                            <a class="nav-link @if(strpos(\Illuminate\Support\Facades\Request::path(), 'partner') === 0) active @endif" href="{{ url(partner_auth() ? 'partner/dashboard' : 'partner/login') }}">合伙人中心</a>
+                                        </li>
+                                    @endif
                                 </ul>
                                 @if(\Illuminate\Support\Facades\Request::path() == '/')
                                     <form class="d-flex">

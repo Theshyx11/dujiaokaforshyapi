@@ -7,6 +7,13 @@
                     <img src="{{ picture_ulr(dujiaoka_config_get('img_logo')) }}" alt="">
                     <div class="info">{{ dujiaoka_config_get('text_logo') }}</div>
                 </a>
+                @if(partner_enabled())
+                    <div class="query layui-hide-xs" style="margin-right: 12px;">
+                        <a href="{{ url(partner_auth() ? 'partner/dashboard' : 'partner/login') }}">
+                            <span>合伙人中心</span>
+                        </a>
+                    </div>
+                @endif
                 <div class="query layui-hide-xs">
                     <a href="{{ url('order-search') }}">
                         <svg t="1602923269232" class="icon" viewBox="0 0 1024 1024" version="1.1"
