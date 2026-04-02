@@ -2,11 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Jobs\MailSend;
 use App\Models\Emailtpl;
 use App\Models\Order;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use App\Events\OrderUpdated as OrderUpdatedEvent;
 
 class OrderUpdated
@@ -45,16 +42,22 @@ class OrderUpdated
         if ($event->order->type == Order::MANUAL_PROCESSING) {
             switch ($event->order->status) {
                 case Order::STATUS_PENDING:
-                    $mailtpl = Emailtpl::query()->where('tpl_token', 'pending_order')->first()->toArray();
-                    self::sendMailToOrderStatus($mailtpl, $order, $to);
+                    $mailtpl = Emailtpl::query()->where('tpl_token', 'pending_order')->first();
+                    if ($mailtpl) {
+                        self::sendMailToOrderStatus($mailtpl->toArray(), $order, $to);
+                    }
                     break;
                 case Order::STATUS_COMPLETED:
-                    $mailtpl = Emailtpl::query()->where('tpl_token', 'completed_order')->first()->toArray();
-                    self::sendMailToOrderStatus($mailtpl, $order, $to);
+                    $mailtpl = Emailtpl::query()->where('tpl_token', 'completed_order')->first();
+                    if ($mailtpl) {
+                        self::sendMailToOrderStatus($mailtpl->toArray(), $order, $to);
+                    }
                     break;
                 case Order::STATUS_FAILURE:
-                    $mailtpl = Emailtpl::query()->where('tpl_token', 'failed_order')->first()->toArray();
-                    self::sendMailToOrderStatus($mailtpl, $order, $to);
+                    $mailtpl = Emailtpl::query()->where('tpl_token', 'failed_order')->first();
+                    if ($mailtpl) {
+                        self::sendMailToOrderStatus($mailtpl->toArray(), $order, $to);
+                    }
                     break;
             }
         }
@@ -75,6 +78,6 @@ class OrderUpdated
     private static function sendMailToOrderStatus(array $mailtpl, array $order, string $to) :void
     {
         $info = replace_mail_tpl($mailtpl, $order);
-        MailSend::dispatch($to, $info['tpl_name'], $info['tpl_content']);
+        dujiaoka_dispatch_mail($to, $info['tpl_name'] ?? '', $info['tpl_content'] ?? '');
     }
 }

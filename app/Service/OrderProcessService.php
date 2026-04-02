@@ -11,7 +11,6 @@ namespace App\Service;
 
 use App\Exceptions\RuleValidationException;
 use App\Jobs\ApiHook;
-use App\Jobs\MailSend;
 use App\Jobs\OrderExpired;
 use App\Jobs\ServerJiang;
 use App\Jobs\TelegramPush;
@@ -500,8 +499,7 @@ class OrderProcessService
         $tpl = $this->emailtplService->detailByToken('manual_send_manage_mail');
         $mailBody = replace_mail_tpl($tpl, $mailData);
         $manageMail = dujiaoka_config_get('manage_email', '');
-        // 邮件发送
-        MailSend::dispatch($manageMail, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        dujiaoka_dispatch_mail($manageMail, $mailBody['tpl_name'] ?? '', $mailBody['tpl_content'] ?? '');
         return $order;
     }
 
@@ -550,8 +548,7 @@ class OrderProcessService
         ];
         $tpl = $this->emailtplService->detailByToken('card_send_user_email');
         $mailBody = replace_mail_tpl($tpl, $mailData);
-        // 邮件发送
-        MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        dujiaoka_dispatch_mail($order->email, $mailBody['tpl_name'] ?? '', $mailBody['tpl_content'] ?? '');
         return $order;
     }
 
@@ -583,7 +580,7 @@ class OrderProcessService
         ];
         $tpl = $this->emailtplService->detailByToken('card_send_user_email');
         $mailBody = replace_mail_tpl($tpl, $mailData);
-        MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        dujiaoka_dispatch_mail($order->email, $mailBody['tpl_name'] ?? '', $mailBody['tpl_content'] ?? '');
 
         return $order;
     }

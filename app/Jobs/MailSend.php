@@ -9,6 +9,7 @@ use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class MailSend implements ShouldQueue
 {
@@ -55,30 +56,40 @@ class MailSend implements ShouldQueue
      */
     public function handle()
     {
+        if (!dujiaoka_mail_is_ready() || !dujiaoka_mail_can_send_to($this->to)) {
+            return;
+        }
+
         $body = $this->content;
         $title = $this->title;
-        $sysConfig = cache('system-setting');
+        $sysConfig = dujiaoka_mail_config();
         $mailConfig = [
             'driver' => $sysConfig['driver'] ?? 'smtp',
             'host' => $sysConfig['host'] ?? '',
             'port' => $sysConfig['port'] ?? '465',
             'username' => $sysConfig['username'] ?? '',
-            'from'      =>  [
-                'address'   =>   $sysConfig['from_address'] ?? '',
-                'name'      =>  $sysConfig['from_name'] ?? '独角发卡'
+            'from' => [
+                'address' => $sysConfig['from_address'] ?? '',
+                'name' => $sysConfig['from_name'] ?? '独角发卡',
             ],
             'password' => $sysConfig['password'] ?? '',
-            'encryption' => $sysConfig['encryption'] ?? ''
+            'encryption' => $sysConfig['encryption'] ?? '',
         ];
-        $to = $this->to;
-        //  覆盖 mail 配置
-        config([
-            'mail'  =>  array_merge(config('mail'), $mailConfig)
-        ]);
-        // 重新注册驱动
-        (new MailServiceProvider(app()))->register();
-        Mail::send(['html' => 'email.mail'], ['body' => $body], function ($message) use ($to, $title){
-            $message->to($to)->subject($title);
-        });
+        $to = trim($this->to);
+
+        try {
+            config([
+                'mail' => array_merge(config('mail'), $mailConfig),
+            ]);
+            (new MailServiceProvider(app()))->register();
+            Mail::send(['html' => 'email.mail'], ['body' => $body], function ($message) use ($to, $title) {
+                $message->to($to)->subject($title);
+            });
+        } catch (\Throwable $exception) {
+            Log::warning('mail send skipped after transport failure', [
+                'to' => $to,
+                'message' => $exception->getMessage(),
+            ]);
+        }
     }
 }

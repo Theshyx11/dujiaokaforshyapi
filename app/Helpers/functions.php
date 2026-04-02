@@ -11,6 +11,7 @@
 use App\Exceptions\AppException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 if (! function_exists('replace_mail_tpl')) {
@@ -123,6 +124,62 @@ if (! function_exists('dujiaoka_config_get')) {
     {
        $sysConfig = dujiaoka_config_all();
        return $sysConfig[$key] ?? $default;
+    }
+}
+
+if (! function_exists('dujiaoka_mail_config')) {
+    function dujiaoka_mail_config(): array
+    {
+        return dujiaoka_config_all();
+    }
+}
+
+if (! function_exists('dujiaoka_mail_is_ready')) {
+    function dujiaoka_mail_is_ready(): bool
+    {
+        $config = dujiaoka_mail_config();
+        $driver = (string) ($config['driver'] ?? 'smtp');
+
+        if ($driver !== 'smtp') {
+            return true;
+        }
+
+        return trim((string) ($config['host'] ?? '')) !== ''
+            && trim((string) ($config['from_address'] ?? '')) !== '';
+    }
+}
+
+if (! function_exists('dujiaoka_mail_can_send_to')) {
+    function dujiaoka_mail_can_send_to(?string $to): bool
+    {
+        if (!is_string($to)) {
+            return false;
+        }
+
+        $to = trim($to);
+        return $to !== '' && filter_var($to, FILTER_VALIDATE_EMAIL) !== false;
+    }
+}
+
+if (! function_exists('dujiaoka_dispatch_mail')) {
+    function dujiaoka_dispatch_mail(?string $to, ?string $title, ?string $content): bool
+    {
+        if (!dujiaoka_mail_is_ready()) {
+            return false;
+        }
+
+        if (!dujiaoka_mail_can_send_to($to)) {
+            return false;
+        }
+
+        $title = trim((string) $title);
+        $content = trim((string) $content);
+        if ($title === '' || $content === '') {
+            return false;
+        }
+
+        \App\Jobs\MailSend::dispatch(trim((string) $to), $title, $content);
+        return true;
     }
 }
 
