@@ -31,6 +31,12 @@ class OrderService
     private $goodsService;
 
     /**
+     * 支付服务层
+     * @var \App\Service\PayService
+     */
+    private $payService;
+
+    /**
      * @var \App\Service\ShyApiRedemptionService
      */
     private $shyApiRedemptionService;
@@ -45,6 +51,7 @@ class OrderService
     public function __construct()
     {
         $this->goodsService = app('Service\GoodsService');
+        $this->payService = app('Service\PayService');
         $this->couponService = app('Service\CouponService');
         $this->shyApiRedemptionService = app('Service\ShyApiRedemptionService');
     }
@@ -83,6 +90,11 @@ class OrderService
         if ($validator->fails()) {
             throw new RuleValidationException($validator->errors()->first());
         }
+
+        if (!$this->payService->detail((int) $request->input('payway'))) {
+            throw new RuleValidationException(__('dujiaoka.prompt.please_select_mode_of_payment'));
+        }
+
         // 极验验证
         if (
             dujiaoka_config_get('is_open_geetest') == BaseModel::STATUS_OPEN

@@ -59,6 +59,7 @@ return [
     'buy_exceeds_limit'         => '已超過限購數量！',
     'buy_empty_query_password'  => '查詢密碼不能為空！',
     'buy_empty_payment_method'  => '未選取支付方式！',
+    'buy_payment_unavailable'   => '目前尚未開通支付，請聯絡客服或稍後再試。',
     'buy_empty_captcha'         => '驗證碼不能為空！',
     'buy_correct_verification'  => '請正確完成行為驗證！',
 

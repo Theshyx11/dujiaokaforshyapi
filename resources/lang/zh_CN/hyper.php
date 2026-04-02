@@ -59,6 +59,7 @@ return [
     'buy_exceeds_limit'         => '已超过限购数量！',
     'buy_empty_query_password'  => '查询密码不能为空！',
     'buy_empty_payment_method'  => '未选择支付方式！',
+    'buy_payment_unavailable'   => '当前暂未开通支付，请联系客服或稍后再试。',
     'buy_empty_captcha'         => '验证码不能为空！',
     'buy_correct_verification'  => '请正确完成行为验证！',
 

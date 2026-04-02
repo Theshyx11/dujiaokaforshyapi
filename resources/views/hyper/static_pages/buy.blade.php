@@ -1,5 +1,8 @@
 @extends('hyper.layouts.seo')
 @section('content')
+@php
+    $hasPayways = !empty($payways) && count($payways) > 0;
+@endphp
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -126,17 +129,22 @@
                     <div class="input-group">
                         <input type="hidden" name="payway" value="{{ $payways[0]['id'] ?? 0 }}">
                         <div class="pay-grid">
-                        @foreach($payways as $key => $way)
+                        @foreach($payways ?? [] as $key => $way)
                             <div class="btn pay-type @if($key == 0) active @endif"
                                          data-type="{{ $way['pay_check'] }}" data-id="{{ $way['id'] }}" data-name="{{ $way['pay_name'] }}">
                             </div>
                         @endforeach
                         </div>
                     </div>
+                    @if(!$hasPayways)
+                        <div class="alert alert-warning mt-2 mb-0" role="alert">
+                            {{ __('hyper.buy_payment_unavailable') }}
+                        </div>
+                    @endif
                 </div>
                 <div class="mt-4 text-center">
                     {{-- 提交订单 --}}
-                    <button type="submit" class="btn btn-danger" id="submit">
+                    <button type="submit" class="btn btn-danger" id="submit" @if(!$hasPayways) disabled @endif>
                         <i class="mdi mdi-truck-fast mr-1"></i>
                             {{ __('hyper.buy_order_now') }}
                     </button>
@@ -173,6 +181,10 @@
 @section('js')
 <script>
     $('#submit').click(function(){
+        if({{ $hasPayways ? 'true' : 'false' }} === false){
+            $.NotificationApp.send("{{ __('hyper.buy_warning') }}","{{ __('hyper.buy_payment_unavailable') }}","top-center","rgba(0,0,0,0.2)","info");
+            return false;
+        }
         if($("input[name='email']").val() == ''){
             {{-- 邮箱不能为空 --}}
             $.NotificationApp.send("{{ __('hyper.buy_warning') }}","{{ __('hyper.buy_empty_mailbox') }}","top-center","rgba(0,0,0,0.2)","info");
