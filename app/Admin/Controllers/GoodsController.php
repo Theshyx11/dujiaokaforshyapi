@@ -46,6 +46,7 @@ class GoodsController extends AdminController
                     GoodsModel::DELIVERY_SOURCE_CARMIS => Admin::color()->primary(),
                     GoodsModel::DELIVERY_SOURCE_SHYAPI => Admin::color()->warning(),
                 ]);
+            $grid->column('partner_redeem_enabled', admin_trans('goods.fields.partner_redeem_enabled'))->switch();
             $grid->column('retail_price');
             $grid->column('actual_price')->sortable();
             $grid->column('in_stock')->display(function () {
@@ -129,6 +130,9 @@ class GoodsController extends AdminController
             $show->field('delivery_source')->as(function ($deliverySource) {
                 return GoodsModel::getDeliverySourceMap()[$deliverySource] ?? $deliverySource;
             });
+            $show->field('partner_redeem_enabled')->as(function ($isOpen) {
+                return GoodsModel::getIsOpenMap()[$isOpen] ?? $isOpen;
+            });
             $show->field('shyapi_name_prefix');
             $show->field('shyapi_quota');
             $show->field('shyapi_assigned_to');
@@ -169,6 +173,9 @@ class GoodsController extends AdminController
             $form->number('buy_limit_num')->help(admin_trans('goods.helps.buy_limit_num'));
             $form->editor('buy_prompt');
             $form->editor('description');
+            $form->switch('partner_redeem_enabled')
+                ->default(GoodsModel::STATUS_CLOSE)
+                ->help(admin_trans('goods.helps.partner_redeem_enabled'));
             $form->text('shyapi_name_prefix')->help(admin_trans('goods.helps.shyapi_name_prefix'));
             $form->number('shyapi_quota')->default(0)->help(admin_trans('goods.helps.shyapi_quota'));
             $form->text('shyapi_assigned_to')->default('shop')->help(admin_trans('goods.helps.shyapi_assigned_to'));

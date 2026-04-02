@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_','-',strtolower(app()->getLocale())) }}">
 @include('hyper.layouts._header')
-<body data-layout="topnav">
+<body class="shyapi-hyper" data-layout="topnav">
     <div class="wrapper">
         <div class="content-page">
             <div class="content">

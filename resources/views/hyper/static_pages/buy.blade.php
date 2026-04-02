@@ -22,6 +22,13 @@
                         {{ $gd_name }}
                     </h3>
                 </div>
+                <div class="shyapi-buy-note">
+                    <span>付款成功后自动发放兑换码</span>
+                    <span>前往 <strong>code.shyapi.top</strong> 充值即可使用</span>
+                    @if(partner_enabled())
+                        <span>支持邀请分销与佣金站内兑换</span>
+                    @endif
+                </div>
                 <div class="form-group">
                     @if($type == \App\Models\Goods::AUTOMATIC_DELIVERY)
                         {{-- 自动发货 --}}
@@ -155,6 +162,7 @@
     <div class="card card-body buy-product">
         {{-- 商品详情 --}}
         <h5 class="card-title">{{ __('hyper.buy_product_desciption') }}</h5>
+        <p class="shyapi-buy-description-note">购买后展示的兑换码可直接在 ShyAPI 控制台完成充值。若你是长期合作推广方，也可以单独使用合伙人中心管理佣金与兑换记录。</p>
         {!! $description !!}
     </div>
 </div>

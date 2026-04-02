@@ -1,5 +1,55 @@
 @extends('hyper.layouts.default')
 @section('content')
+@php
+    $goodsCollection = collect($data)->flatMap(function ($group) {
+        return collect($group['goods'] ?? []);
+    });
+    $goodsCount = $goodsCollection->count();
+    $inStockGoodsCount = $goodsCollection->filter(function ($goods) {
+        return (int) ($goods['in_stock'] ?? 0) > 0;
+    })->count();
+    $fromPrice = $goodsCount > 0 ? number_format((float) $goodsCollection->min('actual_price'), 2) : '0.00';
+@endphp
+<section class="shyapi-shop-hero">
+    <div class="shyapi-shop-hero-grid">
+        <div class="shyapi-shop-hero-copy">
+            <span class="shyapi-hero-kicker">ShyAPI Shop</span>
+            <h1 class="shyapi-hero-title">黑金风格的自动发卡商城</h1>
+            <p class="shyapi-hero-description">
+                这里负责销售兑换码套餐。付款成功后会自动发放兑换码，你可以直接前往 <strong>code.shyapi.top</strong> 充值使用。
+                如果你要做分销推广，也可以进入合伙人中心生成专属邀请链接，把佣金直接兑换成站内卡券。
+            </p>
+            <div class="shyapi-hero-actions">
+                <a class="btn btn-shyapi-primary" href="#group-all">浏览当前套餐</a>
+                <a class="btn btn-shyapi-ghost" href="https://code.shyapi.top" target="_blank" rel="noopener">前往 API 控制台</a>
+                @if(partner_enabled())
+                    <a class="btn btn-shyapi-ghost" href="{{ url(partner_auth() ? 'partner/dashboard' : 'partner/login') }}">进入合伙人中心</a>
+                @endif
+            </div>
+        </div>
+        <div class="shyapi-hero-panel">
+            <div class="shyapi-hero-stat-grid">
+                <div class="shyapi-hero-stat">
+                    <span class="shyapi-hero-stat-label">在售套餐</span>
+                    <strong>{{ $goodsCount }}</strong>
+                </div>
+                <div class="shyapi-hero-stat">
+                    <span class="shyapi-hero-stat-label">可立即发放</span>
+                    <strong>{{ $inStockGoodsCount }}</strong>
+                </div>
+                <div class="shyapi-hero-stat">
+                    <span class="shyapi-hero-stat-label">起售价</span>
+                    <strong>¥{{ $fromPrice }}</strong>
+                </div>
+            </div>
+            <div class="shyapi-hero-steps">
+                <div class="shyapi-hero-step"><span>01</span><p>下单并完成支付</p></div>
+                <div class="shyapi-hero-step"><span>02</span><p>系统自动发放兑换码</p></div>
+                <div class="shyapi-hero-step"><span>03</span><p>前往控制台充值并开始使用</p></div>
+            </div>
+        </div>
+    </div>
+</section>
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -47,25 +97,7 @@
         <div class="hyper-wrapper">
             @foreach($data as $group)
                 @foreach($group['goods'] as $goods)
-                    @if($goods['in_stock'] > 0)
-                    <a href="{{ url("/buy/{$goods['id']}") }}" class="home-card category">
-                    @else
-                    <a href="javascript:void(0);" onclick="sell_out_tip()" class="home-card category ribbon-box">
-                        <div class="ribbon-two ribbon-two-danger">
-                            {{-- 缺货 --}}
-                            <span>{{ __('hyper.home_out_of_stock') }}</span>
-                        </div>
-                    @endif
-                        <img class="home-img" src="/assets/hyper/images/loading.gif" data-src="{{ picture_ulr($goods['picture']) }}">
-                        <div class="flex">
-                            <p class="name">
-                                {{ $goods['gd_name'] }}
-                            </p>
-                            <div class="price">
-                                {{ __('hyper.global_currency') }}<b>{{ $goods['actual_price'] }}</b>
-                            </div>
-                        </div>
-                    </a>
+                    @include('hyper.components.goods-card', ['goods' => $goods])
                 @endforeach
             @endforeach
         </div>
@@ -74,25 +106,7 @@
         <div class="tab-pane" id="group-{{ $group['id'] }}">
             <div class="hyper-wrapper">
                 @foreach($group['goods'] as $goods)
-                    @if($goods['in_stock'] > 0)
-                    <a href="{{ url("/buy/{$goods['id']}") }}" class="home-card category">
-                    @else
-                    <a href="javascript:void(0);" onclick="sell_out_tip()" class="home-card category ribbon-box">
-                        <div class="ribbon-two ribbon-two-danger">
-                            {{-- 缺货 --}}
-                            <span>{{ __('hyper.home_out_of_stock') }}</span>
-                        </div>
-                    @endif
-                        <img class="home-img" src="/assets/hyper/images/loading.gif" data-src="{{ picture_ulr($goods['picture']) }}">
-                        <div class="flex">
-                            <p class="name">
-                                {{ $goods['gd_name'] }}
-                            </p>
-                            <div class="price">
-                                {{ __('hyper.global_currency') }}<b>{{ $goods['actual_price'] }}</b>
-                            </div>
-                        </div>
-                    </a>
+                    @include('hyper.components.goods-card', ['goods' => $goods])
                 @endforeach
             </div>
         </div>

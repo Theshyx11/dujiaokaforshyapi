@@ -298,7 +298,7 @@ if (!function_exists('picture_ulr')) {
     function picture_ulr($file, $getHost = false)
     {
         if ($getHost) return Storage::disk('admin')->url('');
-        return $file ? Storage::disk('admin')->url($file) : url('assets/common/images/default.jpg');
+        return $file ? Storage::disk('admin')->url($file) : url('assets/common/images/shyapi-card.svg');
     }
 }
 

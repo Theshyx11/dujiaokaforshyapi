@@ -88,6 +88,12 @@ class Goods extends BaseModel
             && (int) ($this->attributes['delivery_source'] ?? self::DELIVERY_SOURCE_CARMIS) === self::DELIVERY_SOURCE_SHYAPI;
     }
 
+    public function isPartnerRedeemEnabled(): bool
+    {
+        return $this->isShyApiDelivery()
+            && (int) ($this->attributes['partner_redeem_enabled'] ?? self::STATUS_CLOSE) === self::STATUS_OPEN;
+    }
+
     public static function getDeliverySourceMap(): array
     {
         return [

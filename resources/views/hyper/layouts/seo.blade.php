@@ -21,8 +21,9 @@
     <link href="/assets/hyper/css/icons.min.css" rel="stylesheet" type="text/css">
     <link href="/assets/hyper/css/app-creative.min.css" rel="stylesheet" type="text/css" id="light-style">
     <link href="/assets/hyper/css/hyper.css?v=045256" rel="stylesheet" type="text/css">
+    <link href="/assets/hyper/css/shyapi-brand.css?v=20260402" rel="stylesheet" type="text/css">
 </head>
-<body data-layout="topnav">
+<body class="shyapi-hyper" data-layout="topnav">
     <div class="wrapper">
         <div class="content-page">
             <div class="content">

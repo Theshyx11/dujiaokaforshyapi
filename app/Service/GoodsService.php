@@ -126,6 +126,7 @@ class GoodsService
             ->where('is_open', Goods::STATUS_OPEN)
             ->where('type', Goods::AUTOMATIC_DELIVERY)
             ->where('delivery_source', Goods::DELIVERY_SOURCE_SHYAPI)
+            ->where('partner_redeem_enabled', Goods::STATUS_OPEN)
             ->orderBy('ord', 'DESC')
             ->get();
 

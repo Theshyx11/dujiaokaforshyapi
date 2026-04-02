@@ -1,0 +1,27 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="180" y1="60" x2="1020" y2="840" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18140D"/>
+      <stop offset="0.5" stop-color="#080808"/>
+      <stop offset="1" stop-color="#120D07"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(890 170) rotate(129.391) scale(453.712 495.701)">
+      <stop stop-color="#F3C766" stop-opacity="0.36"/>
+      <stop offset="1" stop-color="#F3C766" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="360" y1="240" x2="740" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDE08A"/>
+      <stop offset="0.52" stop-color="#F4C15D"/>
+      <stop offset="1" stop-color="#B97818"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" rx="52" fill="url(#bg)"/>
+  <rect x="36" y="36" width="1128" height="828" rx="34" stroke="#F5D27A" stroke-opacity="0.18" stroke-width="2"/>
+  <circle cx="910" cy="150" r="250" fill="url(#glow)"/>
+  <path d="M425 210V630" stroke="url(#gold)" stroke-width="36" stroke-linecap="round"/>
+  <path d="M320 300C320 228 530 228 530 300C530 378 320 412 320 482C320 556 530 556 530 482" stroke="url(#gold)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M640 212L800 370L640 530Z" fill="url(#gold)"/>
+  <path d="M640 212L800 370L640 530" stroke="url(#gold)" stroke-width="18" stroke-linejoin="round"/>
+  <text x="120" y="760" fill="#F8E9BD" font-size="98" font-family="'SF Pro Display', 'PingFang SC', sans-serif" font-weight="700" letter-spacing="-2">ShyAPI Shop</text>
+  <text x="126" y="826" fill="#C6B182" font-size="34" font-family="'SF Pro Display', 'PingFang SC', sans-serif">Automatic code delivery | Partner referral wallet</text>
+</svg>

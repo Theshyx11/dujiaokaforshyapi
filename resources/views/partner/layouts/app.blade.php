@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_','-',strtolower(app()->getLocale())) }}">
 @include($template . '.layouts._header')
-<body @if($template === 'hyper') data-layout="topnav" @endif>
+<body class="@if($template === 'hyper') shyapi-hyper @endif shyapi-partner-page" @if($template === 'hyper') data-layout="topnav" @endif>
 @if($template === 'hyper')
 <div class="wrapper">
     <div class="content-page">
