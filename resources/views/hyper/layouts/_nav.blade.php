@@ -10,6 +10,10 @@
             </span>
         </a>
         <div class="shyapi-nav-actions">
+            <a class="btn btn-shyapi-ghost" href="https://code.shyapi.top/docs/" target="_blank" rel="noopener">
+                <i class="uil uil-book-open search-icon"></i>
+                接入文档
+            </a>
             <a class="btn btn-shyapi-ghost" href="https://code.shyapi.top" target="_blank" rel="noopener">
                 <i class="uil uil-chart-growth search-icon"></i>
                 API 控制台

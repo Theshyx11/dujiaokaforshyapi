@@ -13,6 +13,8 @@
                     @if(trim((string) dujiaoka_config_get('footer')) !== '')
                         {!! dujiaoka_config_get('footer') !!}
                     @else
+                        <a href="https://code.shyapi.top/docs/" target="_blank" rel="noopener">接入文档</a>
+                        <span>·</span>
                         <a href="https://code.shyapi.top" target="_blank" rel="noopener">前往控制台充值</a>
                     @endif
                 </div>

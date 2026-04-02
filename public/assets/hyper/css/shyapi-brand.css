@@ -170,6 +170,25 @@ body.shyapi-hyper .shyapi-hero-description {
     line-height: 1.8;
 }
 
+body.shyapi-hyper .shyapi-hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+body.shyapi-hyper .shyapi-hero-trust span {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 193, 93, 0.18);
+    background: rgba(244, 193, 93, 0.08);
+    color: #f6ddb0;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+}
+
 body.shyapi-hyper .shyapi-hero-actions {
     display: flex;
     gap: 12px;
@@ -243,6 +262,116 @@ body.shyapi-hyper .shyapi-hero-step span {
 body.shyapi-hyper .shyapi-hero-step p {
     margin: 0;
     color: var(--shy-text);
+}
+
+body.shyapi-hyper .shyapi-hero-inline-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+body.shyapi-hyper .shyapi-hero-inline-stats > div {
+    padding: 15px 16px;
+    border-radius: 18px;
+    background: rgba(7, 7, 7, 0.58);
+    border: 1px solid rgba(244, 193, 93, 0.12);
+}
+
+body.shyapi-hyper .shyapi-hero-inline-stats span,
+body.shyapi-hyper .shyapi-collection-stat span {
+    display: block;
+    font-size: 12px;
+    color: rgba(247, 237, 207, 0.54);
+}
+
+body.shyapi-hyper .shyapi-hero-inline-stats strong,
+body.shyapi-hyper .shyapi-collection-stat strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 22px;
+    color: #fff0be;
+}
+
+body.shyapi-hyper .shyapi-shortcut-grid,
+body.shyapi-hyper .shyapi-proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+body.shyapi-hyper .shyapi-shortcut-card,
+body.shyapi-hyper .shyapi-proof-card {
+    padding: 22px;
+    border-radius: 24px;
+    border: 1px solid var(--shy-border);
+    background: linear-gradient(180deg, rgba(22, 18, 12, 0.96), rgba(10, 10, 10, 0.96));
+    box-shadow: var(--shy-shadow);
+}
+
+body.shyapi-hyper .shyapi-shortcut-card {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+body.shyapi-hyper .shyapi-shortcut-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--shy-border-strong);
+}
+
+body.shyapi-hyper .shyapi-shortcut-card span,
+body.shyapi-hyper .shyapi-proof-kicker {
+    display: inline-flex;
+    margin-bottom: 12px;
+    color: #f4c96b;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+body.shyapi-hyper .shyapi-shortcut-card strong,
+body.shyapi-hyper .shyapi-proof-card h3 {
+    display: block;
+    margin-bottom: 10px;
+    color: #fff1c6;
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+body.shyapi-hyper .shyapi-shortcut-card p,
+body.shyapi-hyper .shyapi-proof-card p,
+body.shyapi-hyper .shyapi-collection-head p {
+    margin: 0;
+    color: var(--shy-text-soft);
+    line-height: 1.8;
+}
+
+body.shyapi-hyper .shyapi-collection-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 6px 0 18px;
+}
+
+body.shyapi-hyper .shyapi-collection-head h2 {
+    margin: 14px 0 10px;
+    color: #fff0be;
+    font-size: 34px;
+}
+
+body.shyapi-hyper .shyapi-collection-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 300px;
+}
+
+body.shyapi-hyper .shyapi-collection-stat {
+    padding: 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(244, 193, 93, 0.14);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 body.shyapi-hyper .page-title-box,
@@ -339,13 +468,42 @@ body.shyapi-hyper .shyapi-card-body {
     padding: 16px 18px 18px;
 }
 
+body.shyapi-hyper .shyapi-card-tag-row,
 body.shyapi-hyper .shyapi-card-meta {
     display: flex;
     justify-content: space-between;
     gap: 10px;
-    margin-bottom: 12px;
+    flex-wrap: wrap;
     font-size: 12px;
+}
+
+body.shyapi-hyper .shyapi-card-tag-row {
+    margin-bottom: 10px;
+}
+
+body.shyapi-hyper .shyapi-card-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 193, 93, 0.16);
+    background: rgba(244, 193, 93, 0.08);
+    color: #f6ddb0;
+}
+
+body.shyapi-hyper .shyapi-card-tag-strong {
+    background: linear-gradient(135deg, rgba(247, 213, 123, 0.2), rgba(185, 120, 24, 0.26));
+    color: #ffefc0;
+}
+
+body.shyapi-hyper .shyapi-card-meta {
+    margin-bottom: 12px;
     color: rgba(247, 237, 207, 0.56);
+}
+
+body.shyapi-hyper .shyapi-card-copy {
+    display: grid;
+    gap: 10px;
 }
 
 body.shyapi-hyper .home-card .name {
@@ -354,9 +512,57 @@ body.shyapi-hyper .home-card .name {
     color: #fff0be;
 }
 
+body.shyapi-hyper .shyapi-card-description {
+    margin: 0;
+    min-height: 52px;
+    color: var(--shy-text-soft);
+    line-height: 1.65;
+    font-size: 14px;
+}
+
+body.shyapi-hyper .shyapi-card-price-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: end;
+}
+
 body.shyapi-hyper .home-card .price {
-    margin-top: 10px;
     color: #f5c35f;
+}
+
+body.shyapi-hyper .shyapi-card-retail {
+    color: rgba(247, 237, 207, 0.46);
+    text-decoration: line-through;
+    font-size: 13px;
+}
+
+body.shyapi-hyper .shyapi-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(244, 193, 93, 0.1);
+}
+
+body.shyapi-hyper .shyapi-card-cta {
+    color: #fff0be;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+body.shyapi-hyper .shyapi-card-cta-icon {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(244, 193, 93, 0.12);
+    color: #f6c453;
+    font-size: 18px;
 }
 
 body.shyapi-hyper .buy-grid {
@@ -536,7 +742,10 @@ body.shyapi-hyper .back-to-top .btn {
 
 @media (max-width: 991px) {
     body.shyapi-hyper .shyapi-shop-hero-grid,
-    body.shyapi-hyper .buy-grid {
+    body.shyapi-hyper .buy-grid,
+    body.shyapi-hyper .shyapi-shortcut-grid,
+    body.shyapi-hyper .shyapi-proof-grid,
+    body.shyapi-hyper .shyapi-collection-head {
         grid-template-columns: 1fr;
     }
 
@@ -552,6 +761,15 @@ body.shyapi-hyper .back-to-top .btn {
     body.shyapi-hyper .shyapi-nav-actions {
         width: 100%;
         justify-content: flex-start;
+    }
+
+    body.shyapi-hyper .shyapi-collection-head {
+        display: grid;
+        align-items: start;
+    }
+
+    body.shyapi-hyper .shyapi-collection-stat-grid {
+        min-width: 0;
     }
 }
 
@@ -571,6 +789,19 @@ body.shyapi-hyper .back-to-top .btn {
         font-size: 32px;
     }
 
+    body.shyapi-hyper .shyapi-shortcut-card,
+    body.shyapi-hyper .shyapi-proof-card {
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    body.shyapi-hyper .shyapi-shortcut-grid,
+    body.shyapi-hyper .shyapi-proof-grid,
+    body.shyapi-hyper .shyapi-hero-inline-stats,
+    body.shyapi-hyper .shyapi-collection-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
     body.shyapi-hyper .page-title-box,
     body.shyapi-hyper .card,
     body.shyapi-hyper .modal-content {
@@ -583,5 +814,14 @@ body.shyapi-hyper .back-to-top .btn {
 
     body.shyapi-hyper .nav-list .tab-link {
         width: 100%;
+    }
+
+    body.shyapi-hyper .shyapi-collection-head h2 {
+        font-size: 28px;
+    }
+
+    body.shyapi-hyper .shyapi-card-price-row {
+        align-items: start;
+        flex-direction: column;
     }
 }
