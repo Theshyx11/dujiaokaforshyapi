@@ -1,4 +1,5 @@
 @php
+    $planInsight = $planInsight ?? null;
     $isAvailable = (int) ($goods['in_stock'] ?? 0) > 0;
     $retailPrice = (float) ($goods['retail_price'] ?? 0);
     $actualPrice = (float) ($goods['actual_price'] ?? 0);
@@ -23,6 +24,9 @@
     <img class="home-img" src="/assets/hyper/images/loading.gif" data-src="{{ picture_ulr($goods['picture']) }}" alt="{{ $goods['gd_name'] }}">
     <div class="shyapi-card-body">
         <div class="shyapi-card-tag-row">
+            @if(!empty($planInsight['badge']))
+                <span class="shyapi-card-tag shyapi-card-tag-highlight">{{ $planInsight['badge'] }}</span>
+            @endif
             <span class="shyapi-card-tag">{{ $deliveryLabel }}</span>
             @if($savingAmount > 0)
                 <span class="shyapi-card-tag shyapi-card-tag-strong">立省 ¥{{ number_format($savingAmount, 2) }}</span>
@@ -36,6 +40,9 @@
         </div>
         <div class="shyapi-card-copy">
             <p class="name">{{ $goods['gd_name'] }}</p>
+            @if(!empty($planInsight['scenario_title']))
+                <p class="shyapi-card-scenario">{{ $planInsight['scenario_title'] }}</p>
+            @endif
             <p class="shyapi-card-description">{{ $summary }}</p>
             <div class="shyapi-card-price-row">
                 <div class="price">
@@ -43,6 +50,8 @@
                 </div>
                 @if($retailPrice > $actualPrice)
                     <div class="shyapi-card-retail">原价 ¥{{ number_format($retailPrice, 2) }}</div>
+                @elseif(!empty($planInsight['unit_price_formatted']))
+                    <div class="shyapi-card-retail">¥{{ $planInsight['unit_price_formatted'] }}/刀</div>
                 @endif
             </div>
         </div>

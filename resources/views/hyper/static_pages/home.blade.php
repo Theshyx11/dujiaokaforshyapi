@@ -1,29 +1,30 @@
 @extends('hyper.layouts.default')
 @section('content')
 @php
-    $goodsCollection = collect($data)->flatMap(function ($group) {
-        return collect($group['goods'] ?? []);
-    });
-    $goodsCount = $goodsCollection->count();
-    $availableGoods = $goodsCollection->filter(function ($goods) {
-        return (int) ($goods['in_stock'] ?? 0) > 0;
+    $storefront = $storefront ?? [];
+    $planCollection = collect($storefront['plans'] ?? []);
+    $planInsightsById = $planCollection->keyBy('id');
+    $goodsCount = $planCollection->count();
+    $availableGoods = $planCollection->filter(function ($plan) {
+        return (int) ($plan['stock'] ?? 0) > 0;
     })->values();
     $inStockGoodsCount = $availableGoods->count();
-    $totalStock = $availableGoods->sum(function ($goods) {
-        return (int) ($goods['in_stock'] ?? 0);
+    $totalStock = $availableGoods->sum(function ($plan) {
+        return (int) ($plan['stock'] ?? 0);
     });
-    $fromPrice = $goodsCount > 0 ? number_format((float) $goodsCollection->min('actual_price'), 2) : '0.00';
-    $bestSavingGoods = $goodsCollection
-        ->filter(function ($goods) {
-            return (float) ($goods['retail_price'] ?? 0) > (float) ($goods['actual_price'] ?? 0);
+    $fromPrice = $goodsCount > 0 ? number_format((float) $planCollection->min('price'), 2) : '0.00';
+    $bestSavingGoods = $planCollection
+        ->filter(function ($plan) {
+            return (float) ($plan['saving'] ?? 0) > 0;
         })
-        ->sortByDesc(function ($goods) {
-            return (float) ($goods['retail_price'] ?? 0) - (float) ($goods['actual_price'] ?? 0);
+        ->sortByDesc(function ($plan) {
+            return (float) ($plan['saving'] ?? 0);
         })
         ->first();
-    $maxSaving = $bestSavingGoods
-        ? number_format((float) $bestSavingGoods['retail_price'] - (float) $bestSavingGoods['actual_price'], 2)
-        : '0.00';
+    $maxSaving = $bestSavingGoods ? ($bestSavingGoods['saving_formatted'] ?? '0.00') : '0.00';
+    $featuredPlan = $storefront['featured_plan'] ?? null;
+    $guides = $storefront['guides'] ?? [];
+    $notes = $storefront['notes'] ?? [];
 @endphp
 <section class="shyapi-shop-hero">
     <div class="shyapi-shop-hero-grid">
@@ -108,27 +109,148 @@
     @endif
 </section>
 <section class="shyapi-proof-grid">
-    <article class="shyapi-proof-card">
-        <span class="shyapi-proof-kicker">交易链路</span>
-        <h3>商城只负责交易，控制台只负责额度与接口</h3>
-        <p>站点职责拆分后更稳定。你在这里买到的是兑换码，真正的余额、模型、令牌和日志都统一回到控制台管理。</p>
-    </article>
-    <article class="shyapi-proof-card">
-        <span class="shyapi-proof-kicker">交付方式</span>
-        <h3>支付成功后自动发放，不需要人工补单</h3>
-        <p>当前套餐库存直接对接 ShyAPI 兑换码池，售卖页显示的库存就是可立即发放的真实数量。</p>
-    </article>
-    <article class="shyapi-proof-card">
-        <span class="shyapi-proof-kicker">适合谁</span>
-        <h3>个人自用、团队分发、推广分销都能走同一套链路</h3>
-        <p>普通买家直接下单，合作方可走合伙人体系，把佣金继续兑换为站内卡券，不额外引入提现成本。</p>
-    </article>
+    @foreach($notes as $note)
+        <article class="shyapi-proof-card">
+            <span class="shyapi-proof-kicker">运营说明</span>
+            <h3>{{ $note['title'] }}</h3>
+            <p>{{ $note['description'] }}</p>
+        </article>
+    @endforeach
 </section>
+@if($planCollection->count() > 0)
+<section class="shyapi-plan-section">
+    <div class="shyapi-section-heading">
+        <div>
+            <span class="shyapi-hero-kicker">套餐体系</span>
+            <h2>按使用阶段选，不用靠感觉下单</h2>
+            <p>下面这些推荐和对比都由当前在售商品自动生成。以后你新增更多额度包，这里会一起更新。</p>
+        </div>
+        @if($featuredPlan)
+            <div class="shyapi-section-callout">
+                <span>当前主推</span>
+                <strong>{{ $featuredPlan['name'] }}</strong>
+                <p>{{ $featuredPlan['scenario_description'] }}</p>
+            </div>
+        @endif
+    </div>
+    <div class="shyapi-plan-grid">
+        @foreach($storefront['plans'] as $plan)
+            <article class="shyapi-plan-card @if($plan['is_featured']) is-featured @endif">
+                <div class="shyapi-plan-card-top">
+                    <div>
+                        @if(!empty($plan['badge']))
+                            <span class="shyapi-plan-badge">{{ $plan['badge'] }}</span>
+                        @endif
+                        <p class="shyapi-plan-kicker">{{ $plan['scenario_title'] }}</p>
+                        <h3>{{ $plan['name'] }}</h3>
+                    </div>
+                    <div class="shyapi-plan-stock">{{ $plan['stock_label'] }}</div>
+                </div>
+                <p class="shyapi-plan-summary">{{ $plan['summary'] }}</p>
+                <div class="shyapi-plan-price-line">
+                    <strong>¥{{ $plan['price_formatted'] }}</strong>
+                    <div class="shyapi-plan-price-meta">
+                        @if(($plan['retail_price'] ?? 0) > ($plan['price'] ?? 0))
+                            <span>原价 ¥{{ $plan['retail_price_formatted'] }}</span>
+                        @endif
+                        @if(($plan['saving'] ?? 0) > 0)
+                            <span>立省 ¥{{ $plan['saving_formatted'] }}</span>
+                        @endif
+                    </div>
+                </div>
+                <div class="shyapi-plan-metric-grid">
+                    <div>
+                        <span>到手额度</span>
+                        <strong>{{ $plan['quota_label'] }}</strong>
+                    </div>
+                    <div>
+                        <span>单刀成本</span>
+                        <strong>
+                            @if($plan['unit_price_formatted'])
+                                ¥{{ $plan['unit_price_formatted'] }}/刀
+                            @else
+                                按控制台计价
+                            @endif
+                        </strong>
+                    </div>
+                    <div>
+                        <span>适合场景</span>
+                        <strong>{{ $plan['scenario_title'] }}</strong>
+                    </div>
+                </div>
+                <div class="shyapi-plan-bullet-list">
+                    @foreach($plan['bullets'] as $bullet)
+                        <div>{{ $bullet }}</div>
+                    @endforeach
+                </div>
+                <a class="btn btn-shyapi-primary shyapi-plan-buy" href="{{ url($plan['path']) }}">直接购买</a>
+            </article>
+        @endforeach
+    </div>
+</section>
+<section class="shyapi-compare-section">
+    <div class="shyapi-section-heading shyapi-section-heading-compact">
+        <div>
+            <span class="shyapi-hero-kicker">套餐对比</span>
+            <h2>核心差异一眼看完</h2>
+            <p>如果你只想快速判断买哪一档，直接看这里就够了。</p>
+        </div>
+    </div>
+    <div class="shyapi-compare-wrap">
+        <table class="shyapi-compare-table">
+            <thead>
+                <tr>
+                    <th>套餐</th>
+                    <th>适合场景</th>
+                    <th>到手额度</th>
+                    <th>实付</th>
+                    <th>单刀成本</th>
+                    <th>库存</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($storefront['plans'] as $plan)
+                    <tr>
+                        <td>
+                            <strong>{{ $plan['name'] }}</strong>
+                            @if(!empty($plan['badge']))
+                                <span class="shyapi-compare-badge">{{ $plan['badge'] }}</span>
+                            @endif
+                        </td>
+                        <td>{{ $plan['scenario_description'] }}</td>
+                        <td>{{ $plan['quota_label'] }}</td>
+                        <td>¥{{ $plan['price_formatted'] }}</td>
+                        <td>
+                            @if($plan['unit_price_formatted'])
+                                ¥{{ $plan['unit_price_formatted'] }}/刀
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td>{{ $plan['stock'] }}</td>
+                        <td><a href="{{ url($plan['path']) }}">购买</a></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</section>
+<section class="shyapi-buy-guide-grid">
+    @foreach($guides as $guide)
+        <article class="shyapi-buy-guide-card">
+            <span>{{ $guide['label'] }}</span>
+            <h3>{{ $guide['title'] }}</h3>
+            <p>{{ $guide['description'] }}</p>
+        </article>
+    @endforeach
+</section>
+@endif
 <section class="shyapi-collection-head">
     <div>
         <span class="shyapi-hero-kicker">套餐列表</span>
-        <h2>选择合适的额度包，付款后直接去控制台兑换</h2>
-        <p>默认按实际售价排序思路购买即可。若你不确定怎么接入，先看文档，再决定买哪档套餐。</p>
+        <h2>当前在售套餐</h2>
+        <p>对比区看完之后，就可以直接在这里下单。支付完成后回控制台兑换，再创建 API Key 开始使用。</p>
     </div>
     <div class="shyapi-collection-stat-grid">
         <div class="shyapi-collection-stat">
@@ -188,7 +310,7 @@
         <div class="hyper-wrapper">
             @foreach($data as $group)
                 @foreach($group['goods'] as $goods)
-                    @include('hyper.components.goods-card', ['goods' => $goods])
+                    @include('hyper.components.goods-card', ['goods' => $goods, 'planInsight' => $planInsightsById->get($goods['id'])])
                 @endforeach
             @endforeach
         </div>
@@ -197,7 +319,7 @@
         <div class="tab-pane" id="group-{{ $group['id'] }}">
             <div class="hyper-wrapper">
                 @foreach($group['goods'] as $goods)
-                    @include('hyper.components.goods-card', ['goods' => $goods])
+                    @include('hyper.components.goods-card', ['goods' => $goods, 'planInsight' => $planInsightsById->get($goods['id'])])
                 @endforeach
             </div>
         </div>

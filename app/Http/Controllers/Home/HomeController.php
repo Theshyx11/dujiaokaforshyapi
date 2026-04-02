@@ -47,7 +47,11 @@ class HomeController extends BaseController
     public function index(Request $request)
     {
         $goods = $this->goodsService->withGroup();
-        return $this->render('static_pages/home', ['data' => $goods], __('dujiaoka.page-title.home'));
+        $storefront = $this->goodsService->buildStorefrontInsights($goods);
+        return $this->render('static_pages/home', [
+            'data' => $goods,
+            'storefront' => $storefront,
+        ], __('dujiaoka.page-title.home'));
     }
 
     /**

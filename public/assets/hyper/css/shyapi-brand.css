@@ -346,6 +346,260 @@ body.shyapi-hyper .shyapi-collection-head p {
     line-height: 1.8;
 }
 
+body.shyapi-hyper .shyapi-plan-section,
+body.shyapi-hyper .shyapi-compare-section {
+    margin-bottom: 18px;
+}
+
+body.shyapi-hyper .shyapi-section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 18px;
+    margin-bottom: 16px;
+}
+
+body.shyapi-hyper .shyapi-section-heading h2 {
+    margin: 14px 0 10px;
+    color: #fff0be;
+    font-size: 34px;
+}
+
+body.shyapi-hyper .shyapi-section-heading p {
+    margin: 0;
+    max-width: 780px;
+    color: var(--shy-text-soft);
+    line-height: 1.8;
+}
+
+body.shyapi-hyper .shyapi-section-callout {
+    min-width: 280px;
+    padding: 18px;
+    border-radius: 22px;
+    border: 1px solid rgba(244, 193, 93, 0.18);
+    background: linear-gradient(180deg, rgba(247, 213, 123, 0.08), rgba(255, 255, 255, 0.02));
+}
+
+body.shyapi-hyper .shyapi-section-callout span {
+    display: block;
+    color: #f4c96b;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+body.shyapi-hyper .shyapi-section-callout strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff0be;
+    font-size: 24px;
+}
+
+body.shyapi-hyper .shyapi-section-callout p {
+    margin-top: 8px;
+}
+
+body.shyapi-hyper .shyapi-plan-grid,
+body.shyapi-hyper .shyapi-buy-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+body.shyapi-hyper .shyapi-plan-card,
+body.shyapi-hyper .shyapi-buy-guide-card {
+    padding: 22px;
+    border-radius: 24px;
+    border: 1px solid var(--shy-border);
+    background: linear-gradient(180deg, rgba(22, 18, 12, 0.96), rgba(9, 9, 9, 0.98));
+    box-shadow: var(--shy-shadow);
+}
+
+body.shyapi-hyper .shyapi-plan-card {
+    display: grid;
+    gap: 14px;
+}
+
+body.shyapi-hyper .shyapi-plan-card.is-featured {
+    border-color: rgba(244, 193, 93, 0.34);
+    background:
+        radial-gradient(circle at top right, rgba(244, 193, 93, 0.12), transparent 34%),
+        linear-gradient(180deg, rgba(34, 26, 15, 0.98), rgba(10, 10, 10, 0.98));
+}
+
+body.shyapi-hyper .shyapi-plan-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: start;
+}
+
+body.shyapi-hyper .shyapi-plan-badge,
+body.shyapi-hyper .shyapi-compare-badge {
+    display: inline-flex;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(247, 213, 123, 0.2), rgba(185, 120, 24, 0.28));
+    color: #ffefc0;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+body.shyapi-hyper .shyapi-plan-kicker {
+    margin: 12px 0 6px;
+    color: rgba(247, 237, 207, 0.58);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.shyapi-hyper .shyapi-plan-card h3,
+body.shyapi-hyper .shyapi-buy-guide-card h3 {
+    margin: 0;
+    color: #fff0be;
+}
+
+body.shyapi-hyper .shyapi-plan-stock {
+    display: inline-flex;
+    padding: 8px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(244, 193, 93, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+    color: #f6ddb0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+body.shyapi-hyper .shyapi-plan-summary,
+body.shyapi-hyper .shyapi-buy-guide-card p {
+    margin: 0;
+    color: var(--shy-text-soft);
+    line-height: 1.8;
+}
+
+body.shyapi-hyper .shyapi-plan-price-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: end;
+}
+
+body.shyapi-hyper .shyapi-plan-price-line strong {
+    font-size: 34px;
+    color: #fff0be;
+}
+
+body.shyapi-hyper .shyapi-plan-price-meta {
+    display: grid;
+    gap: 4px;
+    color: rgba(247, 237, 207, 0.54);
+    font-size: 13px;
+    text-align: right;
+}
+
+body.shyapi-hyper .shyapi-plan-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+body.shyapi-hyper .shyapi-plan-metric-grid > div {
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(244, 193, 93, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+body.shyapi-hyper .shyapi-plan-metric-grid span,
+body.shyapi-hyper .shyapi-buy-guide-card span {
+    display: block;
+    color: rgba(247, 237, 207, 0.56);
+    font-size: 12px;
+}
+
+body.shyapi-hyper .shyapi-plan-metric-grid strong {
+    display: block;
+    margin-top: 8px;
+    color: #fff0be;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+body.shyapi-hyper .shyapi-plan-bullet-list {
+    display: grid;
+    gap: 10px;
+}
+
+body.shyapi-hyper .shyapi-plan-bullet-list > div {
+    position: relative;
+    padding-left: 18px;
+    color: var(--shy-text-soft);
+    line-height: 1.7;
+}
+
+body.shyapi-hyper .shyapi-plan-bullet-list > div::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--shy-gold);
+}
+
+body.shyapi-hyper .shyapi-plan-buy {
+    justify-self: start;
+}
+
+body.shyapi-hyper .shyapi-compare-wrap {
+    overflow-x: auto;
+    border-radius: 24px;
+    border: 1px solid var(--shy-border);
+    background: linear-gradient(180deg, rgba(18, 18, 18, 0.96), rgba(8, 8, 8, 0.98));
+    box-shadow: var(--shy-shadow);
+}
+
+body.shyapi-hyper .shyapi-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 880px;
+}
+
+body.shyapi-hyper .shyapi-compare-table th,
+body.shyapi-hyper .shyapi-compare-table td {
+    padding: 16px 18px;
+    text-align: left;
+    border-bottom: 1px solid rgba(244, 193, 93, 0.08);
+    color: var(--shy-text-soft);
+    vertical-align: top;
+}
+
+body.shyapi-hyper .shyapi-compare-table th {
+    color: #f4d18a;
+    background: rgba(255, 255, 255, 0.02);
+    font-weight: 700;
+}
+
+body.shyapi-hyper .shyapi-compare-table td strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #fff0be;
+}
+
+body.shyapi-hyper .shyapi-compare-table td a {
+    color: #f6c453;
+    font-weight: 700;
+}
+
+body.shyapi-hyper .shyapi-buy-guide-grid {
+    margin: 18px 0 20px;
+}
+
+body.shyapi-hyper .shyapi-buy-guide-card {
+    background: linear-gradient(180deg, rgba(20, 16, 11, 0.96), rgba(8, 8, 8, 0.98));
+}
+
 body.shyapi-hyper .shyapi-collection-head {
     display: flex;
     align-items: end;
@@ -491,6 +745,12 @@ body.shyapi-hyper .shyapi-card-tag {
     color: #f6ddb0;
 }
 
+body.shyapi-hyper .shyapi-card-tag-highlight {
+    background: rgba(247, 213, 123, 0.16);
+    border-color: rgba(247, 213, 123, 0.26);
+    color: #fff0be;
+}
+
 body.shyapi-hyper .shyapi-card-tag-strong {
     background: linear-gradient(135deg, rgba(247, 213, 123, 0.2), rgba(185, 120, 24, 0.26));
     color: #ffefc0;
@@ -510,6 +770,14 @@ body.shyapi-hyper .home-card .name {
     margin: 0;
     font-size: 18px;
     color: #fff0be;
+}
+
+body.shyapi-hyper .shyapi-card-scenario {
+    margin: 0;
+    color: #f4c96b;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 body.shyapi-hyper .shyapi-card-description {
@@ -745,11 +1013,17 @@ body.shyapi-hyper .back-to-top .btn {
     body.shyapi-hyper .buy-grid,
     body.shyapi-hyper .shyapi-shortcut-grid,
     body.shyapi-hyper .shyapi-proof-grid,
+    body.shyapi-hyper .shyapi-plan-grid,
+    body.shyapi-hyper .shyapi-buy-guide-grid,
     body.shyapi-hyper .shyapi-collection-head {
         grid-template-columns: 1fr;
     }
 
     body.shyapi-hyper .shyapi-hero-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.shyapi-hyper .shyapi-plan-metric-grid {
         grid-template-columns: 1fr;
     }
 
@@ -764,6 +1038,11 @@ body.shyapi-hyper .back-to-top .btn {
     }
 
     body.shyapi-hyper .shyapi-collection-head {
+        display: grid;
+        align-items: start;
+    }
+
+    body.shyapi-hyper .shyapi-section-heading {
         display: grid;
         align-items: start;
     }
@@ -797,8 +1076,10 @@ body.shyapi-hyper .back-to-top .btn {
 
     body.shyapi-hyper .shyapi-shortcut-grid,
     body.shyapi-hyper .shyapi-proof-grid,
+    body.shyapi-hyper .shyapi-plan-grid,
     body.shyapi-hyper .shyapi-hero-inline-stats,
-    body.shyapi-hyper .shyapi-collection-stat-grid {
+    body.shyapi-hyper .shyapi-collection-stat-grid,
+    body.shyapi-hyper .shyapi-buy-guide-grid {
         grid-template-columns: 1fr;
     }
 
@@ -820,8 +1101,27 @@ body.shyapi-hyper .back-to-top .btn {
         font-size: 28px;
     }
 
+    body.shyapi-hyper .shyapi-section-heading h2 {
+        font-size: 28px;
+    }
+
+    body.shyapi-hyper .shyapi-plan-card,
+    body.shyapi-hyper .shyapi-buy-guide-card {
+        padding: 18px;
+        border-radius: 20px;
+    }
+
     body.shyapi-hyper .shyapi-card-price-row {
         align-items: start;
         flex-direction: column;
+    }
+
+    body.shyapi-hyper .shyapi-plan-price-line,
+    body.shyapi-hyper .shyapi-plan-card-top {
+        display: grid;
+    }
+
+    body.shyapi-hyper .shyapi-plan-price-meta {
+        text-align: left;
     }
 }
